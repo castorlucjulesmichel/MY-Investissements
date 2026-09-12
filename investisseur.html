@@ -9,60 +9,60 @@
 <body>
 <div class="app-shell">
   <aside id="sidebar" class="sidebar">
-    <a class="brand" href="investisseur.html"><span class="logo">MY</span><span><strong>MY Investissements</strong><small>Investisseur</small></span></a>
+    <a class="brand" href="investisseur.html"><span class="logo">MY</span><span><strong data-i18n="app">MY Investissements</strong><small data-i18n="investor">Investisseur</small></span></a>
     <nav class="side-nav">
       <a class="active" href="#dashboard" data-i18n="dashboard">Tableau de bord</a>
       <a href="#wallet" data-i18n="wallet">Portefeuille</a>
       <a href="#levels" data-i18n="levels">Niveaux</a>
       <a href="#operations" data-i18n="transactions">Transactions</a>
-      <a href="#messages">Messages</a>
-      <a href="#assistant">Assistant virtuel</a>
+      <a href="#messages" data-i18n="messages">Messages</a>
+      <a href="#assistant" data-i18n="virtualAssistant">Assistant virtuel</a>
     </nav>
     <div class="sidebar-bottom"><button id="logoutBtn" class="btn ghost full" data-i18n="logout">Déconnexion</button></div>
   </aside>
 
   <main class="app-main">
     <header class="app-topbar">
-      <div class="top-actions"><button id="mobileMenu" class="btn ghost mobile-menu">☰</button><strong id="userName">Investisseur</strong></div>
+      <div class="top-actions"><button id="mobileMenu" class="btn ghost mobile-menu">☰</button><strong id="userName" data-i18n="investor">Investisseur</strong></div>
       <div class="top-actions"><select id="currencyView" class="select compact"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select><select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select></div>
     </header>
 
     <div class="page">
       <section id="dashboard" class="section-block">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="welcome">Bienvenue</span><h1 id="welcomeName">Mon espace</h1><p class="muted">Suivez vos soldes, investissements et opérations validées.</p></div><span id="accountStatus" class="status active">Actif</span></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="welcome">Bienvenue</span><h1 id="welcomeName" data-i18n="mySpace">Mon espace</h1><p class="muted" data-i18n="investorOverview">Suivez vos soldes, investissements et opérations validées.</p></div><span id="accountStatus" class="status active" data-i18n="active">Actif</span></div>
         <div class="metrics">
           <article class="metric"><span data-i18n="balance">Solde</span><strong id="metricBalance">0 HTG</strong></article>
           <article class="metric"><span data-i18n="invested">Capital investi</span><strong id="metricInvested">0 HTG</strong></article>
           <article class="metric"><span data-i18n="profit">Rendement estimé</span><strong id="metricProfit">0 HTG</strong></article>
-          <article class="metric"><span>Investissements actifs</span><strong id="metricActive">0</strong></article>
+          <article class="metric"><span data-i18n="activeInvestments">Investissements actifs</span><strong id="metricActive">0</strong></article>
         </div>
       </section>
 
       <section id="wallet" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="wallet">Portefeuille</span><h2>Mes soldes</h2></div></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="wallet">Portefeuille</span><h2 data-i18n="myBalances">Mes soldes</h2></div></div>
         <div id="walletGrid" class="wallet-grid"></div>
         <div class="grid-3">
           <form id="depositForm" class="panel">
-            <h3 data-i18n="deposit">Dépôt</h3><p class="muted small" data-i18n="manual">Traitement manuel par l’administrateur</p>
+            <h3 data-i18n="deposit">Dépôt</h3><p class="muted small" data-i18n="manual">Traitement manuel par le service d’administration</p>
             <label><span data-i18n="amount">Montant</span><input id="depositAmount" type="number" min="1" step="0.01" required></label>
             <label><span data-i18n="currency">Devise</span><select id="depositCurrency" class="select"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select></label>
-            <label><span data-i18n="method">Méthode</span><select id="depositMethod" class="select"><option>NatCash</option><option>MonCash</option><option>Bank transfer</option></select></label>
+            <label><span data-i18n="method">Méthode</span><select id="depositMethod" class="select"><option>NatCash</option><option>MonCash</option><option value="Bank transfer" data-i18n="bankTransfer">Virement bancaire</option></select></label>
             <label><span data-i18n="reference">Référence</span><input id="depositReference" required></label>
             <label><span data-i18n="proof">Lien de preuve</span><input id="depositProof" type="url" placeholder="https://..."></label>
             <button class="btn primary full" type="submit" data-i18n="submit">Soumettre</button>
           </form>
 
           <form id="withdrawForm" class="panel">
-            <h3 data-i18n="withdraw">Retrait</h3><p class="muted small">L’administrateur effectue le paiement puis confirme la référence.</p>
+            <h3 data-i18n="withdraw">Retrait</h3><p class="muted small" data-i18n="withdrawInfo">Le service d’administration effectue le paiement puis confirme la référence.</p>
             <label><span data-i18n="amount">Montant</span><input id="withdrawAmount" type="number" min="1" step="0.01" required></label>
             <label><span data-i18n="currency">Devise</span><select id="withdrawCurrency" class="select"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select></label>
-            <label><span data-i18n="method">Méthode</span><select id="withdrawMethod" class="select"><option>NatCash</option><option>MonCash</option><option>Bank transfer</option></select></label>
+            <label><span data-i18n="method">Méthode</span><select id="withdrawMethod" class="select"><option>NatCash</option><option>MonCash</option><option value="Bank transfer" data-i18n="bankTransfer">Virement bancaire</option></select></label>
             <label><span data-i18n="destination">Compte/N° destination</span><input id="withdrawDestination" required></label>
             <button class="btn primary full" type="submit" data-i18n="submit">Soumettre</button>
           </form>
 
           <form id="exchangeForm" class="panel">
-            <h3 data-i18n="exchange">Échange</h3><p class="muted small">La conversion est exécutée après validation du taux par l’administrateur.</p>
+            <h3 data-i18n="exchange">Échange</h3><p class="muted small" data-i18n="exchangeInfo">La conversion est exécutée après validation du taux par le service d’administration.</p>
             <label><span data-i18n="amount">Montant</span><input id="exchangeAmount" type="number" min="0.01" step="0.01" required></label>
             <label><span data-i18n="from">De</span><select id="exchangeFrom" class="select"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select></label>
             <label><span data-i18n="to">Vers</span><select id="exchangeTo" class="select"><option>USD</option><option>HTG</option><option>EUR</option><option>CAD</option></select></label>
@@ -72,25 +72,25 @@
       </section>
 
       <section id="levels" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="levels">Niveaux</span><h2>Niveaux d’investissement</h2><p class="muted">Les montants et taux affichés sont configurés par l’administrateur. Les rendements sont des estimations et non une garantie.</p></div></div>
-        <div id="levelsGrid" class="levels-grid"><div class="empty">Chargement...</div></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="levels">Niveaux</span><h2 data-i18n="investmentLevels">Niveaux d’investissement</h2><p class="muted" data-i18n="levelsInfo">Les montants et taux affichés sont configurés par le service d’administration. Les rendements sont des estimations et non une garantie.</p></div></div>
+        <div id="levelsGrid" class="levels-grid"><div class="empty" data-i18n="loading">Chargement...</div></div>
       </section>
 
       <section id="operations" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="history">Historique</span><h2>Mes opérations</h2></div></div>
-        <div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Montant</th><th>Devise</th><th data-i18n="status">Statut</th><th data-i18n="reference">Référence</th></tr></thead><tbody id="operationsBody"><tr><td colspan="6" class="empty">Aucune donnée</td></tr></tbody></table></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="history">Historique</span><h2 data-i18n="myOperations">Mes opérations</h2></div></div>
+        <div class="table-wrap"><table><thead><tr><th data-i18n="date">Date</th><th data-i18n="type">Type</th><th data-i18n="amount">Montant</th><th data-i18n="currency">Devise</th><th data-i18n="status">Statut</th><th data-i18n="reference">Référence</th></tr></thead><tbody id="operationsBody"><tr><td colspan="6" class="empty" data-i18n="noData">Aucune donnée</td></tr></tbody></table></div>
       </section>
 
       <section id="messages" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow">Communication</span><h2>Messages avec l’administrateur</h2></div></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="privateService">Service MY</span><h2 data-i18n="privateChatTitle">Messagerie privée</h2><p class="muted" data-i18n="privateChatInfo">Cet espace apparaît uniquement lorsque le Service MY ouvre une conversation avec vous. Aucune identité personnelle de l’administrateur n’est affichée.</p></div></div>
         <div id="messageList" class="chat-list"></div>
-        <form id="messageForm" class="chat-compose"><textarea id="messageText" rows="3" maxlength="1000" placeholder="Écrivez votre message..." required></textarea><button class="btn blue" type="submit">Envoyer</button></form>
+        <form id="messageForm" class="chat-compose"><textarea id="messageText" rows="3" maxlength="1000" data-i18n-placeholder="replyService" placeholder="Répondre au Service MY..." required></textarea><button class="btn blue" type="submit" data-i18n="send">Envoyer</button></form>
       </section>
 
       <section id="assistant" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow">Assistant virtuel</span><h2>MY Assistant</h2><p class="muted">Posez une question sur votre compte, les dépôts, retraits, niveaux ou échanges.</p></div></div>
-        <div id="assistantList" class="chat-list"><div class="chat-bubble assistant">Bonjour 👋 Je peux vous expliquer le fonctionnement de MY Investissements. Je ne peux pas garantir un rendement ni effectuer un transfert d’argent à votre place.</div></div>
-        <form id="assistantForm" class="chat-compose"><input id="assistantInput" maxlength="300" placeholder="Ex. Comment faire un dépôt ?" required><button class="btn primary" type="submit">Envoyer</button></form>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="virtualAssistant">Assistant virtuel</span><h2>MY Assistant</h2><p class="muted" data-i18n="virtualAssistantText">Posez une question sur votre compte, les dépôts, retraits, niveaux ou échanges.</p></div></div>
+        <div id="assistantList" class="chat-list"><div class="chat-bubble assistant" data-i18n="assistantGreeting">Bonjour 👋 Je peux vous expliquer le fonctionnement de MY Investissements. Je ne peux pas garantir un rendement ni effectuer un transfert d’argent à votre place.</div></div>
+        <form id="assistantForm" class="chat-compose"><input id="assistantInput" maxlength="300" data-i18n-placeholder="assistantPlaceholder" placeholder="Ex. Comment faire un dépôt ?" required><button class="btn primary" type="submit" data-i18n="send">Envoyer</button></form>
       </section>
     </div>
   </main>
