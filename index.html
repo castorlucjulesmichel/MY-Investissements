@@ -1,196 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="MY Investissements - prototype de plateforme de suivi d'investissements.">
-  <title>MY Investissements</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="MY Investissements - espace sécurisé pour investisseurs et administration.">
+  <title>MY Investissements</title><link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">MY</div>
-      <div>
-        <h1>MY Investissements</h1>
-        <p>Investir avec clarté</p>
-      </div>
-    </div>
-    <button id="menuBtn" class="menu-btn" aria-label="Menu">☰</button>
-    <nav id="mainNav" class="nav">
-      <a href="#accueil">Accueil</a>
-      <a href="#niveaux">Niveaux</a>
-      <a href="#portefeuille">Portefeuille</a>
-      <a href="#depot">Dépôt</a>
-      <a href="#historique">Historique</a>
-    </nav>
+<body class="auth-page">
+  <header class="auth-topbar">
+    <a class="brand" href="index.html"><span class="logo">MY</span><span><strong>MY Investissements</strong><small data-i18n="secure">Accès sécurisé</small></span></a>
+    <select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select>
   </header>
-
-  <main>
-    <section class="notice">
-      <strong>Prototype :</strong> cette version sert à tester l'interface et les calculs. Aucun dépôt réel n'est traité automatiquement.
+  <main class="auth-shell">
+    <section class="auth-hero">
+      <span class="eyebrow">MY Investissements</span>
+      <h1>Gérez vos investissements, votre portefeuille et vos opérations depuis un seul espace.</h1>
+      <p>Les dépôts, retraits, investissements et échanges sont enregistrés dans Firebase. Les mouvements financiers sont validés par l’administrateur.</p>
+      <div class="feature-row"><span>✓ Firebase Auth</span><span>✓ Firestore</span><span>✓ Multi-devise</span><span>✓ FR · HT · EN · ES</span></div>
     </section>
-
-    <section id="accueil" class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">Plateforme d'investissement</span>
-        <h2>Choisissez votre niveau et suivez vos rendements estimés.</h2>
-        <p>Visualisez votre capital, vos estimations hebdomadaires et annuelles, ainsi que l'historique de vos opérations.</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#niveaux">Voir les niveaux</a>
-          <button class="btn ghost" id="openDepositTop">Faire un dépôt test</button>
-        </div>
-      </div>
-      <div class="hero-card">
-        <p>Solde disponible</p>
-        <h3 id="balanceDisplay">0 HTG</h3>
-        <span>Compte démo</span>
-      </div>
-    </section>
-
-    <section id="portefeuille" class="stats-grid">
-      <article class="stat-card">
-        <span>Capital investi</span>
-        <strong id="investedDisplay">0 HTG</strong>
-      </article>
-      <article class="stat-card">
-        <span>Rendement hebdo. estimé</span>
-        <strong id="weeklyDisplay">0 HTG</strong>
-      </article>
-      <article class="stat-card">
-        <span>Rendement annuel estimé</span>
-        <strong id="yearlyDisplay">0 HTG</strong>
-      </article>
-    </section>
-
-    <section id="niveaux" class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Plans</span>
-          <h2>Niveaux d'investissement</h2>
-        </div>
-        <p>Les taux ci-dessous sont des exemples de démonstration et ne constituent pas une promesse de rendement.</p>
-      </div>
-
-      <div class="levels-grid">
-        <article class="level-card">
-          <span class="level-tag">Niveau 1</span>
-          <h3>1 000 HTG</h3>
-          <p>0,25 % / semaine</p>
-          <strong>≈ 130 HTG / an</strong>
-          <button class="btn primary invest-btn" data-level="Niveau 1" data-amount="1000" data-rate="0.0025">Choisir</button>
-        </article>
-        <article class="level-card featured">
-          <span class="level-tag">Niveau 2</span>
-          <h3>5 000 HTG</h3>
-          <p>0,30 % / semaine</p>
-          <strong>≈ 780 HTG / an</strong>
-          <button class="btn primary invest-btn" data-level="Niveau 2" data-amount="5000" data-rate="0.003">Choisir</button>
-        </article>
-        <article class="level-card">
-          <span class="level-tag">Niveau 3</span>
-          <h3>10 000 HTG</h3>
-          <p>0,35 % / semaine</p>
-          <strong>≈ 1 820 HTG / an</strong>
-          <button class="btn primary invest-btn" data-level="Niveau 3" data-amount="10000" data-rate="0.0035">Choisir</button>
-        </article>
-        <article class="level-card">
-          <span class="level-tag">Niveau 4</span>
-          <h3>25 000 HTG</h3>
-          <p>0,40 % / semaine</p>
-          <strong>≈ 5 200 HTG / an</strong>
-          <button class="btn primary invest-btn" data-level="Niveau 4" data-amount="25000" data-rate="0.004">Choisir</button>
-        </article>
-      </div>
-    </section>
-
-    <section class="section calculator">
-      <div>
-        <span class="eyebrow">Simulation</span>
-        <h2>Calculateur de rendement</h2>
-        <p>Entrez un montant et un taux hebdomadaire pour obtenir une estimation.</p>
-      </div>
-      <div class="calc-box">
-        <label>Montant (HTG)
-          <input id="calcAmount" type="number" min="0" value="5000">
-        </label>
-        <label>Taux hebdomadaire (%)
-          <input id="calcRate" type="number" min="0" step="0.01" value="0.30">
-        </label>
-        <button id="calcBtn" class="btn primary">Calculer</button>
-        <div class="calc-result">
-          <span>Par semaine : <strong id="calcWeek">15 HTG</strong></span>
-          <span>Par an : <strong id="calcYear">780 HTG</strong></span>
-        </div>
-      </div>
-    </section>
-
-    <section id="depot" class="section deposit-section">
-      <div>
-        <span class="eyebrow">Portefeuille</span>
-        <h2>Dépôt NatCash</h2>
-        <p>Mode test : saisissez un montant et une référence pour simuler une demande de dépôt. Dans une version réelle, le dépôt doit être vérifié avant tout crédit du solde.</p>
-      </div>
-      <button id="openDeposit" class="btn primary">Créer une demande</button>
-    </section>
-
-    <section id="historique" class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Activité</span>
-          <h2>Historique</h2>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Détail</th>
-              <th>Montant</th>
-              <th>Statut</th>
-            </tr>
-          </thead>
-          <tbody id="historyBody">
-            <tr><td colspan="5" class="empty">Aucune opération pour le moment.</td></tr>
-          </tbody>
-        </table>
-      </div>
+    <section class="auth-card">
+      <div class="tabs"><button class="tab active" data-tab="login" data-i18n="login">Connexion</button><button class="tab" data-tab="register" data-i18n="register">Inscription</button></div>
+      <form id="loginForm" class="auth-form">
+        <label><span data-i18n="email">Adresse e-mail</span><input id="loginEmail" type="email" required autocomplete="email"></label>
+        <label><span data-i18n="password">Mot de passe</span><input id="loginPassword" type="password" minlength="6" required autocomplete="current-password"></label>
+        <button class="btn primary full" type="submit" data-i18n="signin">Se connecter</button>
+      </form>
+      <form id="registerForm" class="auth-form hidden">
+        <label><span data-i18n="name">Nom complet</span><input id="registerName" type="text" minlength="2" required></label>
+        <label><span data-i18n="email">Adresse e-mail</span><input id="registerEmail" type="email" required autocomplete="email"></label>
+        <label><span data-i18n="password">Mot de passe</span><input id="registerPassword" type="password" minlength="6" required autocomplete="new-password"></label>
+        <button class="btn primary full" type="submit" data-i18n="signup">Créer mon compte</button>
+      </form>
+      <p id="authMessage" class="form-message" aria-live="polite"></p>
     </section>
   </main>
-
-  <div id="depositModal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <button id="closeDeposit" class="modal-close" aria-label="Fermer">×</button>
-      <h2>Demande de dépôt NatCash</h2>
-      <p class="muted">Prototype uniquement. Remplacez le numéro ci-dessous par le compte professionnel autorisé lorsque la configuration réelle sera prête.</p>
-      <div class="natcash-box">
-        <span>Numéro NatCash</span>
-        <strong>[NUMÉRO NATCASH]</strong>
-      </div>
-      <form id="depositForm">
-        <label>Montant envoyé (HTG)
-          <input id="depositAmount" type="number" min="1" required>
-        </label>
-        <label>Référence de transaction
-          <input id="depositRef" type="text" maxlength="80" placeholder="Ex. NC123456" required>
-        </label>
-        <label>Nom de l'expéditeur
-          <input id="senderName" type="text" maxlength="80" required>
-        </label>
-        <button class="btn primary full" type="submit">Soumettre la demande</button>
-      </form>
-    </div>
-  </div>
-
-  <div id="toast" class="toast" role="status"></div>
-
-  <footer>
-    <strong>MY Investissements</strong>
-    <p>Prototype de démonstration. Les rendements affichés sont des estimations et non des garanties.</p>
-  </footer>
-
-  <script src="script.js"></script>
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
