@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function chatOpen(uid) {
+      return exists(/databases/$(database)/documents/conversations/$(uid))
+        && get(/databases/$(database)/documents/conversations/$(uid)).data.enabled == true;
+    }
+
+    match /admins/{uid} {
+      allow get: if isSelf(uid);
+      allow list, create, update, delete: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isAdmin() || isSelf(uid);
+      allow create: if isSelf(uid)
+        && request.resource.data.role == 'investor'
+        && request.resource.data.status == 'active';
+      allow update, delete: if isAdmin();
+    }
+
+    match /levels/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /deposits/{id} {
+      allow create: if isAdmin() || (signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending');
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /withdrawals/{id} {
+      allow create: if isAdmin() || (signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending');
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /investments/{id} {
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /exchangeRequests/{id} {
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /conversations/{uid} {
+      allow read: if isAdmin() || isSelf(uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /messages/{id} {
+      allow read: if isAdmin() || (signedIn()
+        && resource.data.userId == request.auth.uid
+        && chatOpen(request.auth.uid));
+
+      allow create: if
+        (isAdmin()
+          && request.resource.data.senderRole == 'service'
+          && request.resource.data.keys().hasOnly(['userId','senderRole','text','createdAt']))
+        ||
+        (signedIn()
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.senderRole == 'investor'
+          && chatOpen(request.auth.uid)
+          && request.resource.data.keys().hasOnly(['userId','senderId','senderRole','text','createdAt']));
+
+      allow update, delete: if isAdmin();
+    }
+  }
+}
