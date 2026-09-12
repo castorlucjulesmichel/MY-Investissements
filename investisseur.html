@@ -42,13 +42,24 @@
         <div class="page-head"><div><span class="eyebrow" data-i18n="wallet">Portefeuille</span><h2 data-i18n="myBalances">Mes soldes</h2></div></div>
         <div id="walletGrid" class="wallet-grid"></div>
         <div class="grid-3">
-          <form id="depositForm" class="panel">
+          <form id="depositForm" class="panel deposit-panel">
             <h3 data-i18n="deposit">Dépôt</h3><p class="muted small" data-i18n="manual">Traitement manuel par le service d’administration</p>
             <label><span data-i18n="amount">Montant</span><input id="depositAmount" type="number" min="1" step="0.01" required></label>
             <label><span data-i18n="currency">Devise</span><select id="depositCurrency" class="select"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select></label>
-            <label><span data-i18n="method">Méthode</span><select id="depositMethod" class="select"><option>NatCash</option><option>MonCash</option><option value="Bank transfer" data-i18n="bankTransfer">Virement bancaire</option></select></label>
+            <label><span data-i18n="method">Méthode</span><select id="depositMethod" class="select"><option value="NatCash">NatCash</option><option value="MonCash">MonCash</option></select></label>
+
+            <div class="payment-account-card">
+              <div class="payment-account-brand">
+                <img id="depositPaymentLogo" src="assets/natcash.svg" alt="NatCash">
+                <div><strong id="depositPaymentBrand">NatCash</strong><p data-deposit-send>Envoyez le paiement à ce compte puis joignez la photo ou capture de la transaction.</p></div>
+              </div>
+              <div class="payment-account-row"><span data-deposit-beneficiary>Bénéficiaire</span><strong id="depositReceiverName">Luc Jules Michel Castor</strong></div>
+              <div id="depositNumberRow" class="payment-account-row"><span data-deposit-number>Numéro</span><strong id="depositReceiverNumber">+509 41766115</strong></div>
+              <div id="depositAccountNote" class="payment-account-note ready">Compte NatCash disponible pour les dépôts.</div>
+            </div>
+
             <label><span data-i18n="reference">Référence</span><input id="depositReference" required></label>
-            <label><span data-i18n="proof">Lien de preuve</span><input id="depositProof" type="url" placeholder="https://..."></label>
+            <label class="proof-upload"><span data-deposit-photo-label>Photo de la transaction</span><input id="depositProof" type="file" accept="image/*" capture="environment" required><small data-deposit-photo-help>Ajoutez une photo ou capture d’écran lisible de la transaction.</small><img id="depositProofPreview" class="proof-preview hidden" alt="Aperçu de la transaction"></label>
             <button class="btn primary full" type="submit" data-i18n="submit">Soumettre</button>
           </form>
 
@@ -97,5 +108,6 @@
 </div>
 <div id="toast" class="toast"></div>
 <script type="module" src="investisseur.js"></script>
+<script type="module" src="deposit-proof.js"></script>
 <script type="module" src="ui-lang.js"></script>
 </body></html>
