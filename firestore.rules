@@ -15,6 +15,10 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
+    function validCurrency(c) {
+      return c in ['HTG', 'USD', 'EUR', 'CAD'];
+    }
+
     function chatOpen(uid) {
       return exists(/databases/$(database)/documents/conversations/$(uid))
         && get(/databases/$(database)/documents/conversations/$(uid)).data.enabled == true;
@@ -27,9 +31,19 @@ service cloud.firestore {
 
     match /users/{uid} {
       allow read: if isAdmin() || isSelf(uid);
+
       allow create: if isSelf(uid)
+        && request.resource.data.keys().hasOnly(['uid','name','email','role','status','balances','createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
         && request.resource.data.role == 'investor'
-        && request.resource.data.status == 'active';
+        && request.resource.data.status == 'active'
+        && request.resource.data.balances.keys().hasOnly(['HTG','USD','EUR','CAD'])
+        && request.resource.data.balances.HTG == 0
+        && request.resource.data.balances.USD == 0
+        && request.resource.data.balances.EUR == 0
+        && request.resource.data.balances.CAD == 0;
+
       allow update, delete: if isAdmin();
     }
 
@@ -39,34 +53,74 @@ service cloud.firestore {
     }
 
     match /deposits/{id} {
-      allow create: if isAdmin() || (signedIn()
+      allow create: if isAdmin() || (
+        signedIn()
         && request.resource.data.userId == request.auth.uid
-        && request.resource.data.status == 'pending');
-      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+        && request.resource.data.status == 'pending'
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && validCurrency(request.resource.data.currency)
+      );
+
+      allow read: if isAdmin() || (
+        signedIn() && resource.data.userId == request.auth.uid
+      );
+
       allow update, delete: if isAdmin();
     }
 
     match /withdrawals/{id} {
-      allow create: if isAdmin() || (signedIn()
+      allow create: if isAdmin() || (
+        signedIn()
         && request.resource.data.userId == request.auth.uid
-        && request.resource.data.status == 'pending');
-      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+        && request.resource.data.status == 'pending'
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && validCurrency(request.resource.data.currency)
+        && request.resource.data.amount <= get(/databases/$(database)/documents/users/$(request.auth.uid)).data.balances[request.resource.data.currency]
+      );
+
+      allow read: if isAdmin() || (
+        signedIn() && resource.data.userId == request.auth.uid
+      );
+
       allow update, delete: if isAdmin();
     }
 
     match /investments/{id} {
       allow create: if signedIn()
         && request.resource.data.userId == request.auth.uid
-        && request.resource.data.status == 'pending';
-      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+        && request.resource.data.status == 'pending'
+        && exists(/databases/$(database)/documents/levels/$(request.resource.data.levelId))
+        && get(/databases/$(database)/documents/levels/$(request.resource.data.levelId)).data.active == true
+        && request.resource.data.amount == get(/databases/$(database)/documents/levels/$(request.resource.data.levelId)).data.amount
+        && request.resource.data.currency == get(/databases/$(database)/documents/levels/$(request.resource.data.levelId)).data.currency
+        && request.resource.data.rate == get(/databases/$(database)/documents/levels/$(request.resource.data.levelId)).data.rate
+        && request.resource.data.period == get(/databases/$(database)/documents/levels/$(request.resource.data.levelId)).data.period
+        && request.resource.data.amount <= get(/databases/$(database)/documents/users/$(request.auth.uid)).data.balances[request.resource.data.currency];
+
+      allow read: if isAdmin() || (
+        signedIn() && resource.data.userId == request.auth.uid
+      );
+
       allow update, delete: if isAdmin();
     }
 
     match /exchangeRequests/{id} {
       allow create: if signedIn()
         && request.resource.data.userId == request.auth.uid
-        && request.resource.data.status == 'pending';
-      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+        && request.resource.data.status == 'pending'
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && validCurrency(request.resource.data.fromCurrency)
+        && validCurrency(request.resource.data.toCurrency)
+        && request.resource.data.fromCurrency != request.resource.data.toCurrency
+        && request.resource.data.amount <= get(/databases/$(database)/documents/users/$(request.auth.uid)).data.balances[request.resource.data.fromCurrency];
+
+      allow read: if isAdmin() || (
+        signedIn() && resource.data.userId == request.auth.uid
+      );
+
       allow update, delete: if isAdmin();
     }
 
@@ -76,21 +130,24 @@ service cloud.firestore {
     }
 
     match /messages/{id} {
-      allow read: if isAdmin() || (signedIn()
+      allow read: if isAdmin() || (
+        signedIn()
         && resource.data.userId == request.auth.uid
-        && chatOpen(request.auth.uid));
+        && chatOpen(request.auth.uid)
+      );
 
-      allow create: if
-        (isAdmin()
-          && request.resource.data.senderRole == 'service'
-          && request.resource.data.keys().hasOnly(['userId','senderRole','text','createdAt']))
-        ||
-        (signedIn()
-          && request.resource.data.userId == request.auth.uid
-          && request.resource.data.senderId == request.auth.uid
-          && request.resource.data.senderRole == 'investor'
-          && chatOpen(request.auth.uid)
-          && request.resource.data.keys().hasOnly(['userId','senderId','senderRole','text','createdAt']));
+      allow create: if (
+        isAdmin()
+        && request.resource.data.senderRole == 'service'
+        && request.resource.data.keys().hasOnly(['userId','senderRole','text','createdAt'])
+      ) || (
+        signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.senderRole == 'investor'
+        && chatOpen(request.auth.uid)
+        && request.resource.data.keys().hasOnly(['userId','senderId','senderRole','text','createdAt'])
+      );
 
       allow update, delete: if isAdmin();
     }
