@@ -9,87 +9,87 @@
 <body>
 <div class="app-shell">
   <aside id="sidebar" class="sidebar">
-    <a class="brand" href="admin.html"><span class="logo">MY</span><span><strong>MY Investissements</strong><small>Administration</small></span></a>
+    <a class="brand" href="admin.html"><span class="logo">MY</span><span><strong data-i18n="app">MY Investissements</strong><small data-i18n="admin">Administration</small></span></a>
     <nav class="side-nav">
       <a class="active" href="#dashboard" data-i18n="dashboard">Tableau de bord</a>
       <a href="#levels" data-i18n="levels">Niveaux</a>
       <a href="#investors" data-i18n="investors">Investisseurs</a>
-      <a href="#requests">Demandes</a>
-      <a href="#manual">Opérations manuelles</a>
-      <a href="#messages">Communication</a>
+      <a href="#requests" data-i18n="requests">Demandes</a>
+      <a href="#manual" data-i18n="manualOperations">Opérations manuelles</a>
+      <a href="#messages" data-i18n="communication">Communication</a>
     </nav>
     <div class="sidebar-bottom"><button id="logoutBtn" class="btn ghost full" data-i18n="logout">Déconnexion</button></div>
   </aside>
 
   <main class="app-main">
     <header class="app-topbar">
-      <div class="top-actions"><button id="mobileMenu" class="btn ghost mobile-menu">☰</button><strong>Admin unique</strong></div>
+      <div class="top-actions"><button id="mobileMenu" class="btn ghost mobile-menu">☰</button><strong data-i18n="adminUnique">Admin unique</strong></div>
       <div class="top-actions"><select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select></div>
     </header>
 
     <div class="page">
       <section id="dashboard" class="section-block">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="admin">Administration</span><h1>Tableau de bord</h1><p class="muted">Contrôle des investisseurs, niveaux et opérations financières.</p></div><span class="status active">Admin autorisé</span></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="admin">Administration</span><h1 data-i18n="dashboard">Tableau de bord</h1><p class="muted" data-i18n="adminControl">Contrôle des investisseurs, niveaux et opérations financières.</p></div><span class="status active" data-i18n="adminAuthorized">Admin autorisé</span></div>
         <div class="metrics">
-          <article class="metric"><span>Investisseurs</span><strong id="metricUsers">0</strong></article>
-          <article class="metric"><span>Niveaux actifs</span><strong id="metricLevels">0</strong></article>
-          <article class="metric"><span>Demandes en attente</span><strong id="metricPending">0</strong></article>
-          <article class="metric"><span>Investissements actifs</span><strong id="metricInvestments">0</strong></article>
+          <article class="metric"><span data-i18n="investors">Investisseurs</span><strong id="metricUsers">0</strong></article>
+          <article class="metric"><span data-i18n="activeLevels">Niveaux actifs</span><strong id="metricLevels">0</strong></article>
+          <article class="metric"><span data-i18n="pendingRequests">Demandes en attente</span><strong id="metricPending">0</strong></article>
+          <article class="metric"><span data-i18n="activeInvestments">Investissements actifs</span><strong id="metricInvestments">0</strong></article>
         </div>
         <div class="grid-2">
-          <article class="panel"><h3>Flux par devise</h3><div id="flowStats" class="wallet-grid"></div></article>
-          <article class="panel"><h3>Activité récente</h3><div id="recentActivity" class="request-list"><div class="empty">Aucune donnée</div></div></article>
+          <article class="panel"><h3 data-i18n="flowByCurrency">Flux par devise</h3><div id="flowStats" class="wallet-grid"></div></article>
+          <article class="panel"><h3 data-i18n="recentActivity">Activité récente</h3><div id="recentActivity" class="request-list"><div class="empty" data-i18n="noData">Aucune donnée</div></div></article>
         </div>
       </section>
 
       <section id="levels" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="levels">Niveaux</span><h2>Gestion des niveaux</h2><p class="muted">L’administrateur définit le montant, la devise, le taux et la période.</p></div></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="levels">Niveaux</span><h2 data-i18n="manageLevels">Gestion des niveaux</h2><p class="muted" data-i18n="adminDefinesLevel">L’administrateur définit le montant, la devise, le taux et la période.</p></div></div>
         <form id="levelForm" class="form-grid">
           <input id="levelId" type="hidden">
-          <label><span>Nom du niveau</span><input id="levelName" placeholder="Niveau 1" required></label>
+          <label><span data-i18n="levelName">Nom du niveau</span><input id="levelName" data-i18n-placeholder="levelPlaceholder" placeholder="Niveau 1" required></label>
           <label><span data-i18n="amount">Montant</span><input id="levelAmount" type="number" min="0.01" step="0.01" required></label>
           <label><span data-i18n="currency">Devise</span><select id="levelCurrency" class="select"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select></label>
           <label><span data-i18n="rate">Taux</span> (%)<input id="levelRate" type="number" min="0" step="0.01" required></label>
-          <label><span data-i18n="period">Période</span><select id="levelPeriod" class="select"><option value="weekly">Hebdomadaire</option><option value="annual">Annuel</option></select></label>
-          <label><span data-i18n="status">Statut</span><select id="levelActive" class="select"><option value="true">Actif</option><option value="false">Inactif</option></select></label>
-          <div class="full-row toolbar"><button class="btn blue" type="submit" data-i18n="save">Enregistrer</button><button id="cancelLevelEdit" class="btn ghost" type="button">Annuler</button></div>
+          <label><span data-i18n="period">Période</span><select id="levelPeriod" class="select"><option value="weekly" data-i18n="weekly">Hebdomadaire</option><option value="annual" data-i18n="annual">Annuel</option></select></label>
+          <label><span data-i18n="status">Statut</span><select id="levelActive" class="select"><option value="true" data-i18n="active">Actif</option><option value="false" data-i18n="inactive">Inactif</option></select></label>
+          <div class="full-row toolbar"><button class="btn blue" type="submit" data-i18n="save">Enregistrer</button><button id="cancelLevelEdit" class="btn ghost" type="button" data-i18n="cancel">Annuler</button></div>
         </form>
         <div id="adminLevels" class="levels-grid" style="margin-top:18px"></div>
       </section>
 
       <section id="investors" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow" data-i18n="investors">Investisseurs</span><h2>Liste des investisseurs</h2></div></div>
-        <div class="table-wrap"><table><thead><tr><th>Nom</th><th>Email</th><th>HTG</th><th>USD</th><th>EUR</th><th>CAD</th><th data-i18n="status">Statut</th><th>Action</th></tr></thead><tbody id="investorsBody"><tr><td colspan="8" class="empty">Chargement...</td></tr></tbody></table></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="investors">Investisseurs</span><h2 data-i18n="investorList">Liste des investisseurs</h2></div></div>
+        <div class="table-wrap"><table><thead><tr><th data-i18n="name">Nom</th><th data-i18n="email">Email</th><th>HTG</th><th>USD</th><th>EUR</th><th>CAD</th><th data-i18n="status">Statut</th><th data-i18n="action">Action</th></tr></thead><tbody id="investorsBody"><tr><td colspan="8" class="empty" data-i18n="loading">Chargement...</td></tr></tbody></table></div>
       </section>
 
       <section id="requests" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow">Demandes</span><h2>Validation des opérations</h2></div><select id="requestFilter" class="select compact"><option value="all">Toutes</option><option value="deposit">Dépôts</option><option value="withdrawal">Retraits</option><option value="investment">Investissements</option><option value="exchange">Échanges</option></select></div>
-        <div id="requestsList" class="request-list"><div class="empty">Aucune demande.</div></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="requests">Demandes</span><h2 data-i18n="validateOperations">Validation des opérations</h2></div><select id="requestFilter" class="select compact"><option value="all" data-i18n="all">Toutes</option><option value="deposit" data-i18n="deposits">Dépôts</option><option value="withdrawal" data-i18n="withdrawals">Retraits</option><option value="investment" data-i18n="investments">Investissements</option><option value="exchange" data-i18n="exchanges">Échanges</option></select></div>
+        <div id="requestsList" class="request-list"><div class="empty" data-i18n="noRequests">Aucune demande.</div></div>
       </section>
 
       <section id="manual" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow">Opérations manuelles</span><h2>Dépôt / Retrait administrateur</h2><p class="muted">Enregistrez uniquement une opération que vous avez réellement vérifiée ou exécutée hors de l’application.</p></div></div>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="manualOperations">Opérations manuelles</span><h2 data-i18n="adminDepositWithdrawal">Dépôt / Retrait administrateur</h2><p class="muted" data-i18n="manualWarning">Enregistrez uniquement une opération que vous avez réellement vérifiée ou exécutée hors de l’application.</p></div></div>
         <form id="manualOperationForm" class="form-grid">
-          <label><span>Investisseur</span><select id="manualUser" class="select" required></select></label>
-          <label><span>Type</span><select id="manualType" class="select"><option value="deposit">Dépôt</option><option value="withdrawal">Retrait</option></select></label>
+          <label><span data-i18n="investor">Investisseur</span><select id="manualUser" class="select" required></select></label>
+          <label><span data-i18n="type">Type</span><select id="manualType" class="select"><option value="deposit" data-i18n="deposit">Dépôt</option><option value="withdrawal" data-i18n="withdraw">Retrait</option></select></label>
           <label><span data-i18n="amount">Montant</span><input id="manualAmount" type="number" min="0.01" step="0.01" required></label>
           <label><span data-i18n="currency">Devise</span><select id="manualCurrency" class="select"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select></label>
-          <label><span data-i18n="method">Méthode</span><select id="manualMethod" class="select"><option>NatCash</option><option>MonCash</option><option>Bank transfer</option><option>Cash</option></select></label>
+          <label><span data-i18n="method">Méthode</span><select id="manualMethod" class="select"><option>NatCash</option><option>MonCash</option><option value="Bank transfer" data-i18n="bankTransfer">Virement bancaire</option><option value="Cash" data-i18n="cash">Espèces</option></select></label>
           <label><span data-i18n="reference">Référence</span><input id="manualReference" required></label>
-          <div class="full-row"><button class="btn primary" type="submit">Valider l’opération</button></div>
+          <div class="full-row"><button class="btn primary" type="submit" data-i18n="validateOperation">Valider l’opération</button></div>
         </form>
       </section>
 
       <section id="messages" class="section-block panel">
-        <div class="page-head"><div><span class="eyebrow">Communication</span><h2>Messages avec les investisseurs</h2><p class="muted">Choisissez un investisseur pour lire et envoyer des messages.</p></div><select id="chatUserSelect" class="select compact"></select></div>
-        <div id="adminMessageList" class="chat-list"><div class="empty">Sélectionnez un investisseur.</div></div>
-        <form id="adminMessageForm" class="chat-compose"><textarea id="adminMessageText" rows="3" maxlength="1000" placeholder="Écrivez un message..." required></textarea><button class="btn blue" type="submit">Envoyer</button></form>
+        <div class="page-head"><div><span class="eyebrow" data-i18n="communication">Communication</span><h2 data-i18n="privateMessaging">Messagerie privée</h2><p class="muted" data-i18n="selectInvestorMessage">Choisissez un investisseur pour lire et envoyer des messages.</p></div><select id="chatUserSelect" class="select compact"></select></div>
+        <div id="adminMessageList" class="chat-list"><div class="empty" data-i18n="selectInvestor">Sélectionnez un investisseur.</div></div>
+        <form id="adminMessageForm" class="chat-compose"><textarea id="adminMessageText" rows="3" maxlength="1000" data-i18n-placeholder="writeMessage" placeholder="Écrivez un message..." required></textarea><button class="btn blue" type="submit" data-i18n="send">Envoyer</button></form>
       </section>
     </div>
   </main>
 </div>
 
-<div id="actionModal" class="modal"><div class="modal-card"><div class="modal-head"><h3 id="actionTitle">Valider</h3><button id="closeActionModal" class="modal-close">×</button></div><div id="actionContent"></div></div></div>
+<div id="actionModal" class="modal"><div class="modal-card"><div class="modal-head"><h3 id="actionTitle" data-i18n="validateOperation">Valider l’opération</h3><button id="closeActionModal" class="modal-close">×</button></div><div id="actionContent"></div></div></div>
 <div id="toast" class="toast"></div>
 <script type="module" src="admin.js"></script>
 </body></html>
