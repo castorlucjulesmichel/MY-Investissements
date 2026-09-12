@@ -18,6 +18,8 @@ if(form){
   const preview=$('#depositProofPreview');
   const submit=form.querySelector('button[type="submit"]');
 
+  if(proof) proof.removeAttribute('capture');
+
   const NATCASH={brand:'NatCash',logo:'assets/natcash.svg',name:'Luc Jules Michel Castor',number:'+509 41766115',enabled:true};
   const MONCASH={brand:'MonCash',logo:'assets/moncash.svg',name:'',number:'',enabled:false};
   const configs={NatCash:NATCASH,MonCash:MONCASH};
@@ -71,6 +73,7 @@ if(form){
     const u=URL.createObjectURL(f);preview.src=u;preview.classList.remove('hidden');preview.onload=()=>URL.revokeObjectURL(u);
   });
   window.addEventListener('my-language-changed',refreshAccount);
+  document.querySelector('#langSelect')?.addEventListener('change',()=>setTimeout(refreshAccount,0));
   refreshAccount();
 
   form.onsubmit=async e=>{
