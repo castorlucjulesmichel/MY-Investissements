@@ -5,7 +5,6 @@ import { doc, setDoc, runTransaction, serverTimestamp } from 'https://www.gstati
 if (document.querySelector('#manualOperationForm')) {
   const $ = s => document.querySelector(s);
   let chatPlaceholder = null;
-  let chatOriginalParent = null;
 
   function notify(text) {
     const box = $('#toast');
@@ -33,6 +32,10 @@ if (document.querySelector('#manualOperationForm')) {
       overlay = document.createElement('div');
       overlay.id = 'adminChatBackdrop';
       overlay.className = 'admin-chat-backdrop';
+      Object.assign(overlay.style, {
+        position: 'fixed', inset: '0', background: 'rgba(15,23,42,.62)',
+        zIndex: '2147483000', display: 'none'
+      });
       document.body.appendChild(overlay);
       overlay.addEventListener('click', closeChatPanel);
     }
@@ -45,6 +48,12 @@ if (document.querySelector('#manualOperationForm')) {
       close.className = 'admin-chat-close';
       close.setAttribute('aria-label', 'Fèmen mesajri a');
       close.textContent = '×';
+      Object.assign(close.style, {
+        display: 'none', position: 'absolute', right: '12px', top: '10px',
+        zIndex: '3', width: '42px', height: '42px', border: '0',
+        borderRadius: '50%', background: '#eef2f7', color: '#14213d',
+        fontSize: '28px', lineHeight: '1'
+      });
       close.addEventListener('click', closeChatPanel);
       section.prepend(close);
     }
@@ -53,18 +62,16 @@ if (document.querySelector('#manualOperationForm')) {
 
   function moveChatToBody(section) {
     if (!section || section.parentElement === document.body) return;
-    chatOriginalParent = section.parentNode;
     chatPlaceholder = document.createComment('admin-chat-placeholder');
-    chatOriginalParent.insertBefore(chatPlaceholder, section);
+    section.parentNode.insertBefore(chatPlaceholder, section);
     document.body.appendChild(section);
   }
 
   function restoreChat(section) {
-    if (!section || !chatPlaceholder || !chatPlaceholder.parentNode) return;
+    if (!section || !chatPlaceholder?.parentNode) return;
     chatPlaceholder.parentNode.insertBefore(section, chatPlaceholder);
     chatPlaceholder.remove();
     chatPlaceholder = null;
-    chatOriginalParent = null;
   }
 
   function openChatPanel() {
@@ -74,16 +81,21 @@ if (document.querySelector('#manualOperationForm')) {
     $('#sidebar')?.classList.remove('show');
     moveChatToBody(section);
 
-    // Force the panel above every mobile browser stacking context.
     section.classList.add('admin-chat-panel-open');
-    section.style.display = 'block';
-    section.style.visibility = 'visible';
-    section.style.opacity = '1';
-    section.style.zIndex = '10001';
-    section.style.background = '#ffffff';
-    overlay.style.zIndex = '10000';
-    overlay.classList.add('show');
+    Object.assign(section.style, {
+      display: 'block', visibility: 'visible', opacity: '1',
+      position: 'fixed', left: '9px', right: '9px', top: '12px', bottom: '12px',
+      width: 'auto', maxWidth: '760px', height: 'auto', maxHeight: 'none',
+      margin: '0 auto', padding: '58px 14px 18px', overflow: 'auto',
+      zIndex: '2147483001', background: '#ffffff', borderRadius: '22px',
+      boxShadow: '0 24px 80px rgba(15,23,42,.35)', transform: 'none'
+    });
+    const close = $('#adminChatClose');
+    if (close) close.style.display = 'block';
+
+    overlay.style.display = 'block';
     document.body.classList.add('admin-chat-open');
+    document.body.style.overflow = 'hidden';
 
     try { history.replaceState(null, '', '#messages'); } catch (_) {}
     const select = $('#chatUserSelect');
@@ -93,17 +105,21 @@ if (document.querySelector('#manualOperationForm')) {
 
   function closeChatPanel() {
     const section = $('#messages');
-    $('#adminChatBackdrop')?.classList.remove('show');
+    const overlay = $('#adminChatBackdrop');
+    if (overlay) overlay.style.display = 'none';
     if (section) {
       section.classList.remove('admin-chat-panel-open');
-      section.style.removeProperty('display');
-      section.style.removeProperty('visibility');
-      section.style.removeProperty('opacity');
-      section.style.removeProperty('z-index');
-      section.style.removeProperty('background');
+      [
+        'display','visibility','opacity','position','left','right','top','bottom','width',
+        'max-width','height','max-height','margin','padding','overflow','z-index',
+        'background','border-radius','box-shadow','transform'
+      ].forEach(p => section.style.removeProperty(p));
+      const close = $('#adminChatClose');
+      if (close) close.style.display = 'none';
       restoreChat(section);
     }
     document.body.classList.remove('admin-chat-open');
+    document.body.style.removeProperty('overflow');
   }
 
   document.addEventListener('click', event => {
