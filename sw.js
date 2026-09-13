@@ -1,4 +1,4 @@
-const CACHE = 'my-investissements-v1';
+const CACHE = 'my-investissements-v2';
 const CORE = [
   '/',
   '/index.html',
@@ -7,7 +7,8 @@ const CORE = [
   '/i18n.js',
   '/firebase-config.js',
   '/manifest.webmanifest',
-  '/assets/app-icon.svg'
+  '/assets/app-icon-192.svg',
+  '/assets/app-icon-512.svg'
 ];
 
 self.addEventListener('install', event => {
