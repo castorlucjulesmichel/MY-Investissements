@@ -9,23 +9,25 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MY Invest">
   <title>Enstale MY Investissements</title>
-  <link rel="manifest" href="/manifest.webmanifest?v=8">
-  <link rel="icon" href="/assets/my-invest-logo-192-v7.svg" sizes="192x192" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v7.svg">
+  <link rel="manifest" href="/manifest.webmanifest?v=9">
+  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg" sizes="192x192" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg">
   <style>
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:linear-gradient(160deg,#03143b,#08245d 55%,#0d63d8);color:#fff;display:grid;place-items:center;padding:22px}.card{width:min(100%,430px);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(10px)}.logo{width:132px;height:132px;border-radius:30px;display:block;margin:0 auto 18px}.eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#a9ddff;font-weight:800}h1{margin:9px 0 10px;font-size:30px;line-height:1.08}.text{color:#dbeafe;line-height:1.55;margin:0 0 20px}.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px 18px;font-size:17px;font-weight:800;cursor:pointer;text-decoration:none}.install{background:#fff;color:#08245d}.continue{margin-top:11px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}.tip{font-size:13px;color:#bfdbfe;line-height:1.5;margin:18px 0 0}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:linear-gradient(160deg,#03143b,#08245d 55%,#0d63d8);color:#fff;display:grid;place-items:center;padding:22px}.card{width:min(100%,430px);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(10px)}.logo{width:146px;height:146px;object-fit:cover;border-radius:30px;display:block;margin:0 auto 18px;box-shadow:0 14px 35px rgba(0,0,0,.28)}.eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#a9ddff;font-weight:800}h1{margin:9px 0 10px;font-size:30px;line-height:1.08}.text{color:#dbeafe;line-height:1.55;margin:0 0 20px}.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px 18px;font-size:17px;font-weight:800;cursor:pointer;text-decoration:none}.install{background:#fff;color:#08245d}.chrome{margin-top:11px;background:#0ea5e9;color:#fff}.continue{margin-top:11px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}.tip{font-size:13px;color:#bfdbfe;line-height:1.5;margin:18px 0 0}.status{font-size:14px;line-height:1.45;color:#e0f2fe;margin:16px 0 0}.hidden{display:none!important}
   </style>
 </head>
 <body>
   <main class="card">
-    <img class="logo" src="/assets/my-invest-logo-512-v7.svg" alt="Logo MY Investissements">
+    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg" alt="Logo MY Investissements">
     <div class="eyebrow">MY Investissements</div>
     <h1>Enstale aplikasyon an</h1>
     <p class="text">Enstale MY Investissements sou telefòn ou pou li louvri tankou yon aplikasyon, san ba navigatè Chrome a.</p>
     <button id="installAppBtn" class="btn install" type="button">📲 Installer MY Investissements</button>
+    <a id="openChromeBtn" class="btn chrome" href="intent://my-investissements.pages.dev/install.html#Intent;scheme=https;package=com.android.chrome;end">🌐 Ouvri nan Chrome</a>
     <a class="btn continue" href="/index.html">Kontinye sou sit la</a>
-    <p class="tip">Si Chrome poko montre fenèt “Installer”, rete sou paj sa a kèk segonn epi peze bouton an ankò. Pa chwazi yon senp raccourci si opsyon “Installer l’application” disponib.</p>
+    <p id="installStatus" class="status">Si paj sa a louvri ak yon X anlè bò gòch, se yon navigatè entegre. Peze “Ouvri nan Chrome” anvan ou enstale.</p>
+    <p class="tip">Lè li enstale kòrèkteman, icon MY Invest la pap gen ti logo Chrome sou li epi aplikasyon an ap louvri an mòd standalone.</p>
   </main>
-  <script type="module" src="/pwa.js?v=8"></script>
+  <script type="module" src="/pwa.js?v=9"></script>
 </body>
 </html>
