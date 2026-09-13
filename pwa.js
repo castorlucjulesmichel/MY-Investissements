@@ -46,6 +46,12 @@ window.addEventListener('beforeinstallprompt', event => {
 
 installBtn?.addEventListener('click', async () => {
   if (isStandalone()) return;
+
+  if (!installStatus && !deferredInstallPrompt) {
+    window.location.href = '/install.html';
+    return;
+  }
+
   const ready = await preparePwa();
   if (!ready) {
     setStatus('Service aplikasyon an pa pare. Relouvri paj la nan Chrome epi eseye ankò.');
@@ -65,7 +71,7 @@ installBtn?.addEventListener('click', async () => {
     return;
   }
 
-  setStatus('Paj sa a sanble louvri nan yon navigatè entegre. Peze “Ouvri nan Chrome”, apre sa peze Installer ankò.');
+  setStatus('Paj sa a louvri nan yon navigatè entegre. Peze “Ouvri nan Chrome”, apre sa peze Installer ankò.');
   openChromeBtn?.classList.remove('hidden');
 });
 
