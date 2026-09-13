@@ -1,4 +1,4 @@
-import './admin-hotfix.js';
+import './admin-hotfix.js?v=20260912-2245';
 import { getLang, t, applyLang } from './i18n.js';
 
 const extra = {
