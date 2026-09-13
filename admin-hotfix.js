@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
 import { doc, setDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
 
-// This file only acts on the admin page.
+// Admin-only fixes for mobile chat navigation and localized exchange rates.
 if (document.querySelector('#manualOperationForm')) {
   const $ = s => document.querySelector(s);
 
@@ -21,9 +21,6 @@ if (document.querySelector('#manualOperationForm')) {
     if (typeof value === 'number') return value;
     let s = String(value ?? '').trim().replace(/\s+/g, '');
     if (!s) return NaN;
-
-    // Accept both 0,0068965517 and 0.0068965517.
-    // If both separators are present, treat the last one as the decimal mark.
     if (s.includes(',') && s.includes('.')) {
       if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
         s = s.replace(/\./g, '').replace(',', '.');
@@ -36,27 +33,68 @@ if (document.querySelector('#manualOperationForm')) {
     return Number(s);
   }
 
-  function goToChat() {
+  function ensureChatOverlay() {
+    let overlay = $('#adminChatBackdrop');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'adminChatBackdrop';
+      overlay.className = 'admin-chat-backdrop';
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', closeChatPanel);
+    }
+
     const section = $('#messages');
-    if (!section) return;
-    $('#sidebar')?.classList.remove('show');
-    requestAnimationFrame(() => {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      try { history.replaceState(null, '', '#messages'); } catch (_) {}
-      const select = $('#chatUserSelect');
-      if (select && !select.value && select.options.length) select.selectedIndex = 0;
-      select?.focus({ preventScroll: true });
-    });
+    if (section && !$('#adminChatClose')) {
+      const close = document.createElement('button');
+      close.id = 'adminChatClose';
+      close.type = 'button';
+      close.className = 'admin-chat-close';
+      close.setAttribute('aria-label', 'Fèmen mesajri a');
+      close.textContent = '×';
+      close.addEventListener('click', closeChatPanel);
+      section.prepend(close);
+    }
+    return { overlay, section };
   }
 
-  // Make every admin chat shortcut work reliably on mobile instead of relying
-  // only on the browser's hash jump while the sidebar is open.
+  function openChatPanel() {
+    const { overlay, section } = ensureChatOverlay();
+    if (!section) {
+      notify('Paj mesajri a pa jwenn.');
+      return;
+    }
+    $('#sidebar')?.classList.remove('show');
+    overlay.classList.add('show');
+    section.classList.add('admin-chat-panel-open');
+    document.body.classList.add('admin-chat-open');
+    try { history.replaceState(null, '', '#messages'); } catch (_) {}
+
+    const select = $('#chatUserSelect');
+    if (select && !select.value && select.options.length) select.selectedIndex = 0;
+    setTimeout(() => select?.focus({ preventScroll: true }), 50);
+  }
+
+  function closeChatPanel() {
+    $('#adminChatBackdrop')?.classList.remove('show');
+    $('#messages')?.classList.remove('admin-chat-panel-open');
+    document.body.classList.remove('admin-chat-open');
+  }
+
+  // Every chat shortcut opens an actual chat panel instead of relying on a hash jump.
   document.addEventListener('click', event => {
     const chatLink = event.target.closest('a[href="#messages"], .admin-chat-shortcut, .admin-chat-link');
     if (!chatLink) return;
     event.preventDefault();
-    goToChat();
+    event.stopPropagation();
+    openChatPanel();
   }, true);
+
+  // If the page is loaded directly with #messages, open the panel automatically.
+  if (location.hash === '#messages') requestAnimationFrame(openChatPanel);
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeChatPanel();
+  });
 
   async function setConversation(enabled) {
     const select = $('#chatUserSelect');
@@ -72,11 +110,7 @@ if (document.querySelector('#manualOperationForm')) {
     if (closeBtn) closeBtn.disabled = true;
 
     try {
-      const data = {
-        userId: uid,
-        enabled,
-        updatedAt: serverTimestamp()
-      };
+      const data = { userId: uid, enabled, updatedAt: serverTimestamp() };
       if (enabled) data.openedAt = serverTimestamp();
       else data.closedAt = serverTimestamp();
 
@@ -95,12 +129,10 @@ if (document.querySelector('#manualOperationForm')) {
       console.error('conversation hotfix', error);
       if (openBtn) openBtn.disabled = false;
       if (closeBtn) closeBtn.disabled = false;
-      notify('Mesajri a pa t kapab chanje. Verifye koneksyon an epi eseye ankò.');
+      notify('Mesajri a pa t kapab chanje. Verifye règ Firestore yo epi eseye ankò.');
     }
   }
 
-  // Capture these clicks before the older handler. This also avoids cases where
-  // the dynamically created button appears but its original handler is stale.
   document.addEventListener('click', event => {
     const open = event.target.closest('#openConversationBtn');
     const close = event.target.closest('#closeConversationBtn');
@@ -110,8 +142,7 @@ if (document.querySelector('#manualOperationForm')) {
     setConversation(Boolean(open));
   }, true);
 
-  // Accept a comma or a dot when the admin validates an exchange rate.
-  // Example: 0,0068965517 is normalized to 0.0068965517 before calculation.
+  // Accept comma or dot for exchange rates.
   document.addEventListener('click', async event => {
     const button = event.target.closest('.approve-request[data-kind="exchange"]');
     if (!button) return;
@@ -163,11 +194,8 @@ if (document.querySelector('#manualOperationForm')) {
 
         tx.update(userRef, { balances, updatedAt: serverTimestamp() });
         tx.update(reqRef, {
-          status: 'approved',
-          rate,
-          convertedAmount,
-          adminReference: reference,
-          processedAt: serverTimestamp()
+          status: 'approved', rate, convertedAmount,
+          adminReference: reference, processedAt: serverTimestamp()
         });
       });
       notify(`Echanj valide. Taux: ${String(rate).replace('.', ',')}`);
