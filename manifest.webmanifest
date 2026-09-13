@@ -15,19 +15,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/assets/app-icon-192.svg?v=6",
+      "src": "/assets/my-invest-logo-192-v7.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/assets/app-icon-512.svg?v=6",
+      "src": "/assets/my-invest-logo-512-v7.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/assets/app-icon-512.svg?v=6",
+      "src": "/assets/my-invest-logo-512-v7.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "maskable"
