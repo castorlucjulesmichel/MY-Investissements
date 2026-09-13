@@ -1,24 +1,36 @@
-const CACHE = 'my-investissements-v2';
+const CACHE = 'my-investissements-v4';
 const CORE = [
   '/',
   '/index.html',
+  '/investisseur.html',
   '/style.css',
   '/auth.js',
   '/i18n.js',
+  '/pwa.js',
   '/firebase-config.js',
   '/manifest.webmanifest',
+  '/assets/app-icon.svg',
   '/assets/app-icon-192.svg',
   '/assets/app-icon-512.svg'
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)));
+  event.waitUntil(
+    caches.open(CACHE).then(cache => Promise.all(
+      CORE.map(async url => {
+        try { await cache.add(url); }
+        catch (error) { console.warn('Cache skip:', url, error); }
+      })
+    ))
+  );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE).map(key => caches.delete(key))
+    ))
   );
   self.clients.claim();
 });
@@ -39,6 +51,11 @@ self.addEventListener('fetch', event => {
         }
         return response;
       })
-      .catch(() => caches.match(request).then(cached => cached || caches.match('/index.html')))
+      .catch(async () => {
+        const cached = await caches.match(request);
+        if (cached) return cached;
+        if (request.mode === 'navigate') return caches.match('/index.html');
+        return Response.error();
+      })
   );
 });
