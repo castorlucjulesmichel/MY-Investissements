@@ -11,18 +11,21 @@ const exact = new Map([
   ['Actif',['t','active']],['Inactif',['t','inactive']],['En attente',['t','pending']],['Approuvé',['t','approved']],['Rejeté',['t','rejected']],['Payé',['t','paid']],
   ['Dépôt',['t','deposit']],['Retrait',['t','withdraw']],['Échange',['t','exchange']],['Investissement',['t','invest']],['Hebdomadaire',['t','weekly']],['Annuel',['t','annual']],['Investir',['t','invest']],
   ['Aucune donnée',['t','noData']],['Chargement...',['t','loading']],['Sélectionnez un investisseur.',['t','selectInvestor']],['Aucun investisseur',['t','noInvestor']],
+  ['Ouverte',['t','opened']],['Fermée',['t','closed']],['Ouvrir la messagerie',['t','openMessaging']],['Fermer',['t','close']],
   ['Modifier',['x','modify']],['Bloquer',['x','block']],['Activer',['x','activate']],['Approuver',['x','approve']],['Rejeter',['x','reject']],['Aucun niveau.',['x','noLevel']],['Aucune demande en attente.',['x','noPending']],['Aucun message.',['x','noMessage']],['Messagerie non ouverte.',['x','messagingNotOpen']],['Service MY',['x','service']],['Moi',['x','me']]
 ]);
 
 function x(key){return extra[getLang()]?.[key]||extra.fr[key]||key;}
 function value(kind,key){return kind==='x'?x(key):t(key);}
+function setTextSafe(el,text){if(el && el.textContent!==text)el.textContent=text;}
+function setPlaceholderSafe(el,text){if(el && el.placeholder!==text)el.placeholder=text;}
 
 function translateElement(el){
   if(!el || el.nodeType!==1) return;
   if(el.dataset?.i18n || el.dataset?.i18nPlaceholder) return;
 
   if(el.dataset?.dynKind && el.dataset?.dynKey){
-    el.textContent=value(el.dataset.dynKind,el.dataset.dynKey);
+    setTextSafe(el,value(el.dataset.dynKind,el.dataset.dynKey));
     return;
   }
 
@@ -33,18 +36,18 @@ function translateElement(el){
   if(found){
     el.dataset.dynKind=found[0];
     el.dataset.dynKey=found[1];
-    el.textContent=value(found[0],found[1]);
+    setTextSafe(el,value(found[0],found[1]));
     return;
   }
 
   if(/^Taux:\s*/.test(raw)){
     el.dataset.dynamicRate=raw.replace(/^Taux:\s*/,'');
-    el.textContent=`${t('rate')}: ${el.dataset.dynamicRate}`;
+    setTextSafe(el,`${t('rate')}: ${el.dataset.dynamicRate}`);
     return;
   }
   if(/— net validé/.test(raw)){
     el.dataset.dynamicNet=raw.replace('net validé','__NET__');
-    el.textContent=el.dataset.dynamicNet.replace('__NET__',x('netValidated'));
+    setTextSafe(el,el.dataset.dynamicNet.replace('__NET__',x('netValidated')));
   }
 }
 
@@ -55,16 +58,16 @@ function translateSubtree(root=document){
 }
 
 function refreshSpecial(){
-  document.querySelectorAll('[data-dyn-kind][data-dyn-key]').forEach(el=>el.textContent=value(el.dataset.dynKind,el.dataset.dynKey));
-  document.querySelectorAll('[data-dynamic-rate]').forEach(el=>el.textContent=`${t('rate')}: ${el.dataset.dynamicRate}`);
-  document.querySelectorAll('[data-dynamic-net]').forEach(el=>el.textContent=el.dataset.dynamicNet.replace('__NET__',x('netValidated')));
+  document.querySelectorAll('[data-dyn-kind][data-dyn-key]').forEach(el=>setTextSafe(el,value(el.dataset.dynKind,el.dataset.dynKey)));
+  document.querySelectorAll('[data-dynamic-rate]').forEach(el=>setTextSafe(el,`${t('rate')}: ${el.dataset.dynamicRate}`));
+  document.querySelectorAll('[data-dynamic-net]').forEach(el=>setTextSafe(el,el.dataset.dynamicNet.replace('__NET__',x('netValidated'))));
 
   const status=document.querySelector('#conversationStatus');
-  if(status) status.textContent=status.classList.contains('active')?t('opened'):t('closed');
-  const open=document.querySelector('#openConversationBtn'); if(open) open.textContent=t('openMessaging');
-  const close=document.querySelector('#closeConversationBtn'); if(close) close.textContent=t('close');
-  const messageText=document.querySelector('#messageText'); if(messageText) messageText.placeholder=t('replyService');
-  const adminMessageText=document.querySelector('#adminMessageText'); if(adminMessageText) adminMessageText.placeholder=t('writeMessage');
+  if(status) setTextSafe(status,status.classList.contains('active')?t('opened'):t('closed'));
+  setTextSafe(document.querySelector('#openConversationBtn'),t('openMessaging'));
+  setTextSafe(document.querySelector('#closeConversationBtn'),t('close'));
+  setPlaceholderSafe(document.querySelector('#messageText'),t('replyService'));
+  setPlaceholderSafe(document.querySelector('#adminMessageText'),t('writeMessage'));
 }
 
 function refreshAll(){
@@ -75,15 +78,15 @@ function refreshAll(){
 
 window.addEventListener('my-language-changed',()=>requestAnimationFrame(refreshAll));
 
-// Only translate newly inserted elements. Do not observe characterData: the old
-// observer retriggered itself continuously and could freeze mobile selects.
+// Translate only DOM pieces that actually changed. All writes are guarded by
+// equality checks so the observer cannot trigger itself in an endless loop.
 const observer=new MutationObserver(mutations=>{
   for(const mutation of mutations){
+    if(mutation.target?.nodeType===1) translateElement(mutation.target);
     for(const node of mutation.addedNodes){
       if(node.nodeType===1) translateSubtree(node);
     }
   }
-  refreshSpecial();
 });
 observer.observe(document.body,{subtree:true,childList:true});
 
