@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="Espace investisseur MY Investissements">
+  <meta name="theme-color" content="#0b2a5b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MY Invest">
   <title>Espace Investisseur — MY Investissements</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/assets/app-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,7 +32,11 @@
   <main class="app-main">
     <header class="app-topbar">
       <div class="top-actions"><button id="mobileMenu" class="btn ghost mobile-menu">☰</button><strong id="userName" data-i18n="investor">Investisseur</strong></div>
-      <div class="top-actions"><select id="currencyView" class="select compact"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select><select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select></div>
+      <div class="top-actions">
+        <button id="installAppBtn" class="btn ghost hidden" type="button" aria-label="Enstale aplikasyon an">📲</button>
+        <select id="currencyView" class="select compact"><option>HTG</option><option>USD</option><option>EUR</option><option>CAD</option></select>
+        <select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select>
+      </div>
     </header>
 
     <div class="page">
@@ -110,4 +122,5 @@
 <script type="module" src="investisseur.js"></script>
 <script type="module" src="deposit-proof.js"></script>
 <script type="module" src="ui-lang.js"></script>
+<script type="module" src="pwa.js"></script>
 </body></html>
