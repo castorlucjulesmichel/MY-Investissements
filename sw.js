@@ -1,4 +1,4 @@
-const CACHE = 'my-investissements-v8';
+const CACHE = 'my-investissements-v9';
 const CORE = [
   '/',
   '/index.html',
@@ -10,8 +10,8 @@ const CORE = [
   '/pwa.js',
   '/firebase-config.js',
   '/manifest.webmanifest',
-  '/assets/my-invest-logo-192-v7.svg',
-  '/assets/my-invest-logo-512-v7.svg'
+  '/assets/my-invest-logo-192-v9.jpg',
+  '/assets/my-invest-logo-512-v9.jpg'
 ];
 
 self.addEventListener('install', event => {
