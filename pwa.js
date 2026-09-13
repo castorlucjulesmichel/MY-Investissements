@@ -1,9 +1,14 @@
 let deferredInstallPrompt = null;
 const installBtn = document.querySelector('#installAppBtn');
-const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+const installStatus = document.querySelector('#installStatus');
+const openChromeBtn = document.querySelector('#openChromeBtn');
+
+const isStandalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone === true;
 
 async function preparePwa() {
-  if (!('serviceWorker' in navigator)) return;
+  if (!('serviceWorker' in navigator)) return false;
   try {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       scope: '/',
@@ -11,42 +16,62 @@ async function preparePwa() {
     });
     await registration.update();
     await navigator.serviceWorker.ready;
+    return true;
   } catch (error) {
     console.error('Service worker registration failed:', error);
+    return false;
   }
+}
+
+function setStatus(text) {
+  if (installStatus) installStatus.textContent = text;
 }
 
 preparePwa();
 
-if (installBtn && !isStandalone()) installBtn.classList.remove('hidden');
-if (installBtn && isStandalone()) installBtn.classList.add('hidden');
+if (isStandalone()) {
+  installBtn?.classList.add('hidden');
+  openChromeBtn?.classList.add('hidden');
+  setStatus('MY Investissements deja enstale sou telefòn sa a.');
+} else {
+  installBtn?.classList.remove('hidden');
+}
 
 window.addEventListener('beforeinstallprompt', event => {
   event.preventDefault();
   deferredInstallPrompt = event;
   installBtn?.classList.remove('hidden');
+  setStatus('Aplikasyon an pare pou enstale. Peze bouton Installer la.');
 });
 
 installBtn?.addEventListener('click', async () => {
-  if (isStandalone()) {
-    installBtn.classList.add('hidden');
+  if (isStandalone()) return;
+  const ready = await preparePwa();
+  if (!ready) {
+    setStatus('Service aplikasyon an pa pare. Relouvri paj la nan Chrome epi eseye ankò.');
     return;
   }
-
-  await preparePwa();
 
   if (deferredInstallPrompt) {
     deferredInstallPrompt.prompt();
     const choice = await deferredInstallPrompt.userChoice;
-    if (choice.outcome === 'accepted') installBtn.classList.add('hidden');
+    if (choice.outcome === 'accepted') {
+      installBtn.classList.add('hidden');
+      setStatus('Enstalasyon an kòmanse.');
+    } else {
+      setStatus('Enstalasyon an anile. Ou ka peze Installer ankò.');
+    }
     deferredInstallPrompt = null;
     return;
   }
 
-  alert('Aplikasyon an pare. Sou Chrome Android, ouvri meni ⋮ epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”, apre sa peze Ajouter. Si bouton an pa ajoute anyen, verifye nan paramèt ekran dakèy telefòn nan ke “Verrouiller la disposition de l’écran d’accueil” pa aktive.');
+  setStatus('Paj sa a sanble louvri nan yon navigatè entegre. Peze “Ouvri nan Chrome”, apre sa peze Installer ankò.');
+  openChromeBtn?.classList.remove('hidden');
 });
 
 window.addEventListener('appinstalled', () => {
   deferredInstallPrompt = null;
   installBtn?.classList.add('hidden');
+  openChromeBtn?.classList.add('hidden');
+  setStatus('MY Investissements enstale avèk siksè.');
 });
