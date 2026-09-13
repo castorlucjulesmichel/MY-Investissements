@@ -1,16 +1,15 @@
 import { db } from './firebase-config.js';
 import { doc, setDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
 
-// Admin-only fixes for mobile chat navigation and localized exchange rates.
+// Admin-only fixes for mobile chat and localized exchange rates.
 if (document.querySelector('#manualOperationForm')) {
   const $ = s => document.querySelector(s);
+  let chatPlaceholder = null;
+  let chatOriginalParent = null;
 
   function notify(text) {
     const box = $('#toast');
-    if (!box) {
-      alert(text);
-      return;
-    }
+    if (!box) { alert(text); return; }
     box.textContent = text;
     box.classList.add('show');
     clearTimeout(window.__adminHotfixToast);
@@ -22,14 +21,9 @@ if (document.querySelector('#manualOperationForm')) {
     let s = String(value ?? '').trim().replace(/\s+/g, '');
     if (!s) return NaN;
     if (s.includes(',') && s.includes('.')) {
-      if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
-        s = s.replace(/\./g, '').replace(',', '.');
-      } else {
-        s = s.replace(/,/g, '');
-      }
-    } else {
-      s = s.replace(',', '.');
-    }
+      if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
+      else s = s.replace(/,/g, '');
+    } else s = s.replace(',', '.');
     return Number(s);
   }
 
@@ -57,52 +51,76 @@ if (document.querySelector('#manualOperationForm')) {
     return { overlay, section };
   }
 
+  function moveChatToBody(section) {
+    if (!section || section.parentElement === document.body) return;
+    chatOriginalParent = section.parentNode;
+    chatPlaceholder = document.createComment('admin-chat-placeholder');
+    chatOriginalParent.insertBefore(chatPlaceholder, section);
+    document.body.appendChild(section);
+  }
+
+  function restoreChat(section) {
+    if (!section || !chatPlaceholder || !chatPlaceholder.parentNode) return;
+    chatPlaceholder.parentNode.insertBefore(section, chatPlaceholder);
+    chatPlaceholder.remove();
+    chatPlaceholder = null;
+    chatOriginalParent = null;
+  }
+
   function openChatPanel() {
     const { overlay, section } = ensureChatOverlay();
-    if (!section) {
-      notify('Paj mesajri a pa jwenn.');
-      return;
-    }
-    $('#sidebar')?.classList.remove('show');
-    overlay.classList.add('show');
-    section.classList.add('admin-chat-panel-open');
-    document.body.classList.add('admin-chat-open');
-    try { history.replaceState(null, '', '#messages'); } catch (_) {}
+    if (!section) { notify('Paj mesajri a pa jwenn.'); return; }
 
+    $('#sidebar')?.classList.remove('show');
+    moveChatToBody(section);
+
+    // Force the panel above every mobile browser stacking context.
+    section.classList.add('admin-chat-panel-open');
+    section.style.display = 'block';
+    section.style.visibility = 'visible';
+    section.style.opacity = '1';
+    section.style.zIndex = '10001';
+    section.style.background = '#ffffff';
+    overlay.style.zIndex = '10000';
+    overlay.classList.add('show');
+    document.body.classList.add('admin-chat-open');
+
+    try { history.replaceState(null, '', '#messages'); } catch (_) {}
     const select = $('#chatUserSelect');
     if (select && !select.value && select.options.length) select.selectedIndex = 0;
-    setTimeout(() => select?.focus({ preventScroll: true }), 50);
+    setTimeout(() => select?.focus({ preventScroll: true }), 80);
   }
 
   function closeChatPanel() {
+    const section = $('#messages');
     $('#adminChatBackdrop')?.classList.remove('show');
-    $('#messages')?.classList.remove('admin-chat-panel-open');
+    if (section) {
+      section.classList.remove('admin-chat-panel-open');
+      section.style.removeProperty('display');
+      section.style.removeProperty('visibility');
+      section.style.removeProperty('opacity');
+      section.style.removeProperty('z-index');
+      section.style.removeProperty('background');
+      restoreChat(section);
+    }
     document.body.classList.remove('admin-chat-open');
   }
 
-  // Every chat shortcut opens an actual chat panel instead of relying on a hash jump.
   document.addEventListener('click', event => {
     const chatLink = event.target.closest('a[href="#messages"], .admin-chat-shortcut, .admin-chat-link');
     if (!chatLink) return;
     event.preventDefault();
-    event.stopPropagation();
+    event.stopImmediatePropagation();
     openChatPanel();
   }, true);
 
-  // If the page is loaded directly with #messages, open the panel automatically.
   if (location.hash === '#messages') requestAnimationFrame(openChatPanel);
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeChatPanel();
-  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') closeChatPanel(); });
 
   async function setConversation(enabled) {
     const select = $('#chatUserSelect');
     const uid = select?.value || '';
-    if (!uid) {
-      notify('Chwazi yon envestisè anvan.');
-      return;
-    }
+    if (!uid) { notify('Chwazi yon envestisè anvan.'); return; }
 
     const openBtn = $('#openConversationBtn');
     const closeBtn = $('#closeConversationBtn');
@@ -113,7 +131,6 @@ if (document.querySelector('#manualOperationForm')) {
       const data = { userId: uid, enabled, updatedAt: serverTimestamp() };
       if (enabled) data.openedAt = serverTimestamp();
       else data.closedAt = serverTimestamp();
-
       await setDoc(doc(db, 'conversations', uid), data, { merge: true });
 
       const status = $('#conversationStatus');
@@ -146,13 +163,11 @@ if (document.querySelector('#manualOperationForm')) {
   document.addEventListener('click', async event => {
     const button = event.target.closest('.approve-request[data-kind="exchange"]');
     if (!button) return;
-
     event.preventDefault();
     event.stopImmediatePropagation();
 
     const id = button.dataset.id;
     if (!id) return;
-
     const rawRate = prompt('Taux réel de l’échange (virgule ou point accepté) :', '');
     if (rawRate === null) return;
     const rate = parseLocalizedNumber(rawRate);
@@ -162,10 +177,7 @@ if (document.querySelector('#manualOperationForm')) {
     }
 
     const reference = (prompt('Référence de l’échange réel :', '') || '').trim();
-    if (!reference) {
-      notify('Referans obligatwa.');
-      return;
-    }
+    if (!reference) { notify('Referans obligatwa.'); return; }
 
     button.disabled = true;
     try {
@@ -180,8 +192,7 @@ if (document.querySelector('#manualOperationForm')) {
         const userSnap = await tx.get(userRef);
         if (!userSnap.exists()) throw new Error('Envestisè a pa jwenn.');
 
-        const from = req.fromCurrency;
-        const to = req.toCurrency;
+        const from = req.fromCurrency, to = req.toCurrency;
         const amount = Number(req.amount || 0);
         const balances = { ...(userSnap.data().balances || {}) };
         const available = Number(balances[from] || 0);
@@ -191,19 +202,13 @@ if (document.querySelector('#manualOperationForm')) {
         const convertedAmount = amount * rate;
         balances[from] = available - amount;
         balances[to] = Number(balances[to] || 0) + convertedAmount;
-
         tx.update(userRef, { balances, updatedAt: serverTimestamp() });
-        tx.update(reqRef, {
-          status: 'approved', rate, convertedAmount,
-          adminReference: reference, processedAt: serverTimestamp()
-        });
+        tx.update(reqRef, { status:'approved', rate, convertedAmount, adminReference:reference, processedAt:serverTimestamp() });
       });
       notify(`Echanj valide. Taux: ${String(rate).replace('.', ',')}`);
     } catch (error) {
       console.error('exchange hotfix', error);
       notify(error.message || 'Echanj la pa t kapab valide.');
-    } finally {
-      button.disabled = false;
-    }
+    } finally { button.disabled = false; }
   }, true);
 }
