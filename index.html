@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="MY Investissements - espace sécurisé pour investisseurs et administration.">
-  <title>MY Investissements</title><link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#0b2a5b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MY Invest">
+  <title>MY Investissements</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="auth-page">
   <header class="auth-topbar">
@@ -30,9 +39,11 @@
         <label><span data-i18n="password">Mot de passe</span><input id="registerPassword" type="password" minlength="6" required autocomplete="new-password"></label>
         <button class="btn primary full" type="submit" data-i18n="signup">Créer mon compte</button>
       </form>
+      <button id="installAppBtn" class="btn ghost full hidden" type="button" style="margin-top:12px">📲 Enstale aplikasyon an</button>
       <p id="authMessage" class="form-message" aria-live="polite"></p>
     </section>
   </main>
   <script type="module" src="auth.js"></script>
+  <script type="module" src="pwa.js"></script>
 </body>
 </html>
