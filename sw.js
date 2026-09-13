@@ -1,4 +1,4 @@
-const CACHE = 'my-investissements-v9';
+const CACHE = 'my-investissements-v10';
 const CORE = [
   '/',
   '/index.html',
@@ -42,7 +42,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(request)
+    fetch(request, { cache: 'no-store' })
       .then(response => {
         if (response && response.ok) {
           const clone = response.clone();
