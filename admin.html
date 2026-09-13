@@ -5,7 +5,7 @@
   <meta name="description" content="Administration MY Investissements">
   <title>Administration — MY Investissements</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="admin-mobile.css?v=20260912-2245">
+  <link rel="stylesheet" href="admin-mobile.css?v=20260912-2305">
 </head>
 <body>
 <div class="app-shell">
@@ -15,7 +15,7 @@
       <a class="active" href="#dashboard" data-i18n="dashboard">Tableau de bord</a>
       <a href="#levels" data-i18n="levels">Niveaux</a>
       <a href="#investors" data-i18n="investors">Investisseurs</a>
-      <a class="admin-chat-link" href="#messages" data-i18n="privateMessaging">Messagerie privée</a>
+      <a class="chat-page-link" href="admin-chat.html" data-i18n="privateMessaging">Messagerie privée</a>
       <a href="#requests" data-i18n="requests">Demandes</a>
       <a href="#manual" data-i18n="manualOperations">Opérations manuelles</a>
     </nav>
@@ -26,7 +26,7 @@
     <header class="app-topbar">
       <div class="top-actions"><button id="mobileMenu" class="btn ghost mobile-menu">☰</button><strong data-i18n="adminUnique">Admin unique</strong></div>
       <div class="top-actions">
-        <a class="btn ghost admin-chat-shortcut" href="#messages" aria-label="Messages">💬 <span data-i18n="messages">Messages</span></a>
+        <a class="btn ghost chat-page-shortcut" href="admin-chat.html" aria-label="Messages">💬 <span data-i18n="messages">Messages</span></a>
         <select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select>
       </div>
     </header>
@@ -66,7 +66,7 @@
         <div class="table-wrap"><table><thead><tr><th data-i18n="name">Nom</th><th data-i18n="email">Email</th><th>HTG</th><th>USD</th><th>EUR</th><th>CAD</th><th data-i18n="status">Statut</th><th data-i18n="action">Action</th></tr></thead><tbody id="investorsBody"><tr><td colspan="8" class="empty" data-i18n="loading">Chargement...</td></tr></tbody></table></div>
       </section>
 
-      <section id="messages" class="section-block panel">
+      <section id="messages" class="section-block panel" style="display:none">
         <div class="page-head"><div><span class="eyebrow" data-i18n="communication">Communication</span><h2 data-i18n="privateMessaging">Messagerie privée</h2><p class="muted" data-i18n="selectInvestorMessage">Choisissez un investisseur pour lire et envoyer des messages.</p></div><select id="chatUserSelect" class="select compact"></select></div>
         <div id="adminMessageList" class="chat-list"><div class="empty" data-i18n="selectInvestor">Sélectionnez un investisseur.</div></div>
         <form id="adminMessageForm" class="chat-compose"><textarea id="adminMessageText" rows="3" maxlength="1000" data-i18n-placeholder="writeMessage" placeholder="Écrivez un message..." required></textarea><button class="btn blue" type="submit" data-i18n="send">Envoyer</button></form>
@@ -96,5 +96,5 @@
 <div id="toast" class="toast"></div>
 <script type="module" src="admin.js"></script>
 <script type="module" src="deposit-proof-admin.js"></script>
-<script type="module" src="ui-lang.js?v=20260912-2245"></script>
+<script type="module" src="ui-lang.js?v=20260912-2305"></script>
 </body></html>
