@@ -5,17 +5,23 @@ import { bindLanguageSelector } from './i18n.js';
 
 bindLanguageSelector();
 const $=s=>document.querySelector(s);
-const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt',"'":'&#39;','"':'&quot;'}[c]));
 const money=(n,c='HTG')=>`${Number(n||0).toLocaleString('fr-FR',{maximumFractionDigits:2})} ${c}`;
 const stamp=v=>v?.toDate?v.toDate():new Date(0);
 const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.classList.remove('show'),2800)};
 let users=[],levels=[],deposits=[],withdrawals=[],investments=[],exchanges=[],conversations=[];
 let chatUnsub=null,currentChatUid='';
+let renderQueued=false,selectorSignature='';
 
 $('#mobileMenu').onclick=()=>$('#sidebar').classList.toggle('show');
 $('#logoutBtn').onclick=async()=>{await signOut(auth);location.href='index.html'};
 document.querySelectorAll('.side-nav a').forEach(a=>a.onclick=()=>$('#sidebar').classList.remove('show'));
 
+function scheduleRender(){
+  if(renderQueued)return;
+  renderQueued=true;
+  requestAnimationFrame(()=>{renderQueued=false;renderAll()});
+}
 function renderAll(){renderMetrics();renderUsers();renderLevels();renderRequests();renderSelectors();renderFlows();renderRecent();renderConversationState()}
 function renderMetrics(){
   $('#metricUsers').textContent=users.filter(u=>u.role!=='admin').length;
@@ -38,13 +44,18 @@ function renderUsers(){
 }
 function renderSelectors(){
   const list=users.filter(u=>u.role!=='admin');
-  const opts=list.map(u=>`<option value="${u.uid}">${esc(u.name||u.email)} — ${esc(u.email||'')}</option>`).join('');
-  const oldManual=$('#manualUser').value, oldChat=$('#chatUserSelect').value;
-  $('#manualUser').innerHTML=opts||'<option value="">Aucun investisseur</option>';
-  $('#chatUserSelect').innerHTML=opts||'<option value="">Aucun investisseur</option>';
-  if([...$('#manualUser').options].some(o=>o.value===oldManual))$('#manualUser').value=oldManual;
-  if([...$('#chatUserSelect').options].some(o=>o.value===oldChat))$('#chatUserSelect').value=oldChat;
-  const uid=$('#chatUserSelect').value||'';
+  const manual=$('#manualUser'),chat=$('#chatUserSelect');
+  const signature=list.map(u=>`${u.uid}:${u.name||''}:${u.email||''}`).join('|');
+  const oldManual=manual.value,oldChat=chat.value;
+  if(signature!==selectorSignature){
+    selectorSignature=signature;
+    const opts=list.map(u=>`<option value="${u.uid}">${esc(u.name||u.email)} — ${esc(u.email||'')}</option>`).join('');
+    manual.innerHTML=opts||'<option value="">Aucun investisseur</option>';
+    chat.innerHTML=opts||'<option value="">Aucun investisseur</option>';
+    if([...manual.options].some(o=>o.value===oldManual))manual.value=oldManual;
+    if([...chat.options].some(o=>o.value===oldChat))chat.value=oldChat;
+  }
+  const uid=chat.value||'';
   if(uid!==currentChatUid)watchChat(uid);else renderConversationState();
 }
 function renderLevels(){
@@ -104,7 +115,7 @@ $('#adminMessageForm').onsubmit=async e=>{e.preventDefault();const uid=$('#chatU
 
 function statusClass(s){return s==='approved'?'approved':s==='rejected'?'rejected':s==='paid'?'paid':s==='active'?'active':'pending'}
 function statusLabel(s){return ({pending:'En attente',approved:'Approuvé',rejected:'Rejeté',paid:'Payé',active:'Actif'}[s]||s||'En attente')}
-function watch(name,setter){return onSnapshot(collection(db,name),snap=>{setter(snap.docs.map(d=>({id:d.id,...d.data()})));renderAll()},e=>console.error(name,e))}
+function watch(name,setter){return onSnapshot(collection(db,name),snap=>{setter(snap.docs.map(d=>({id:d.id,...d.data()})));scheduleRender()},e=>console.error(name,e))}
 function startAdmin(){ensureChatControls();watch('users',x=>users=x);watch('levels',x=>levels=x);watch('deposits',x=>deposits=x);watch('withdrawals',x=>withdrawals=x);watch('investments',x=>investments=x);watch('exchangeRequests',x=>exchanges=x);watch('conversations',x=>conversations=x)}
 
 onAuthStateChanged(auth,async u=>{
