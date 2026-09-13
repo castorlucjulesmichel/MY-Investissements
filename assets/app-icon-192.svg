@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 512 512" role="img" aria-label="MY Investissements">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b2a5b"/>
+      <stop offset="1" stop-color="#0d63d8"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#54c7ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <path d="M105 337V169l86 79 67-83 70 86 39-32v118h-58v-56l-56 47-64-79-64 79-60-55v44z" fill="#fff" opacity=".98"/>
+  <path d="M115 342c78-9 148-34 203-72 41-28 76-64 108-109l-6 53 52-61-77-5 36 20c-31 40-64 72-102 98-53 36-119 59-214 76z" fill="url(#arrow)"/>
+  <rect x="310" y="337" width="33" height="71" rx="8" fill="#54c7ff"/>
+  <rect x="355" y="310" width="33" height="98" rx="8" fill="#2da7ff"/>
+  <rect x="400" y="276" width="33" height="132" rx="8" fill="#147ee8"/>
+</svg>
