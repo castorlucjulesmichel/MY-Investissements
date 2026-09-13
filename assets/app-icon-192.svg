@@ -1,18 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 512 512" role="img" aria-label="MY Investissements">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b2a5b"/>
-      <stop offset="1" stop-color="#0d63d8"/>
-    </linearGradient>
-    <linearGradient id="arrow" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#1d4ed8"/>
-      <stop offset="1" stop-color="#54c7ff"/>
-    </linearGradient>
+    <radialGradient id="bg" cx="30%" cy="18%" r="95%"><stop offset="0" stop-color="#123d91"/><stop offset="0.5" stop-color="#08245d"/><stop offset="1" stop-color="#03143b"/></radialGradient>
+    <linearGradient id="swoosh" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0868ff"/><stop offset="0.55" stop-color="#129cff"/><stop offset="1" stop-color="#31e6ff"/></linearGradient>
+    <linearGradient id="bars" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#0868ff"/><stop offset="1" stop-color="#31e6ff"/></linearGradient>
   </defs>
-  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
-  <path d="M105 337V169l86 79 67-83 70 86 39-32v118h-58v-56l-56 47-64-79-64 79-60-55v44z" fill="#fff" opacity=".98"/>
-  <path d="M115 342c78-9 148-34 203-72 41-28 76-64 108-109l-6 53 52-61-77-5 36 20c-31 40-64 72-102 98-53 36-119 59-214 76z" fill="url(#arrow)"/>
-  <rect x="310" y="337" width="33" height="71" rx="8" fill="#54c7ff"/>
-  <rect x="355" y="310" width="33" height="98" rx="8" fill="#2da7ff"/>
-  <rect x="400" y="276" width="33" height="132" rx="8" fill="#147ee8"/>
+  <rect x="18" y="18" width="476" height="476" rx="104" fill="url(#bg)"/>
+  <path d="M104 315V156l80 77 72-84 72 84 59-57v92l-58 54v-83l-73 84-72-84-23 22v54z" fill="#fff"/>
+  <path d="M78 356c91 3 171-19 236-64 54-37 94-82 126-135l-10 46 45-55-70 2 30 20c-30 46-67 84-115 117-67 47-150 72-242 69z" fill="url(#swoosh)"/>
+  <rect x="310" y="326" width="42" height="82" rx="8" fill="url(#bars)"/>
+  <rect x="367" y="290" width="42" height="118" rx="8" fill="url(#bars)"/>
+  <rect x="424" y="245" width="42" height="163" rx="8" fill="url(#bars)"/>
 </svg>
