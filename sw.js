@@ -1,4 +1,4 @@
-const CACHE = 'my-investissements-v4';
+const CACHE = 'my-investissements-v7';
 const CORE = [
   '/',
   '/index.html',
@@ -9,9 +9,8 @@ const CORE = [
   '/pwa.js',
   '/firebase-config.js',
   '/manifest.webmanifest',
-  '/assets/app-icon.svg',
-  '/assets/app-icon-192.svg',
-  '/assets/app-icon-512.svg'
+  '/assets/my-invest-logo-192-v7.svg',
+  '/assets/my-invest-logo-512-v7.svg'
 ];
 
 self.addEventListener('install', event => {
@@ -38,7 +37,6 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
-
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
