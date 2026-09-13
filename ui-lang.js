@@ -1,3 +1,4 @@
+import './admin-hotfix.js';
 import { getLang, t, applyLang } from './i18n.js';
 
 const extra = {
