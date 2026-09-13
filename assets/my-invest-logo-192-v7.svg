@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 512 512" role="img" aria-label="MY Investissements">
+<defs>
+  <radialGradient id="bg" cx="28%" cy="15%" r="105%"><stop offset="0" stop-color="#16469d"/><stop offset=".52" stop-color="#0a2c6b"/><stop offset="1" stop-color="#03143b"/></radialGradient>
+  <linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#ffffff"/><stop offset="1" stop-color="#cfe5ff"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0668ff"/><stop offset=".58" stop-color="#12a9ff"/><stop offset="1" stop-color="#35e9ff"/></linearGradient>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="18" y="18" width="476" height="476" rx="108" fill="url(#bg)"/>
+<path d="M84 335V137l80 79 86-89 73 87 69-67v91l-69 68-73-87-86 89-46-45v72z" fill="url(#m)"/>
+<path d="M63 357c111 15 213-10 291-62 48-32 88-72 119-120l-10 44 44-57-72 3 31 18c-27 42-61 76-103 105-77 52-179 79-300 69z" fill="url(#blue)" filter="url(#glow)"/>
+<rect x="286" y="335" width="42" height="73" rx="7" fill="url(#blue)"/>
+<rect x="345" y="301" width="42" height="107" rx="7" fill="url(#blue)"/>
+<rect x="404" y="252" width="42" height="156" rx="7" fill="url(#blue)"/>
+</svg>
