@@ -9,25 +9,137 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MY Invest">
   <title>Enstale MY Investissements</title>
-  <link rel="manifest" href="/manifest.webmanifest?v=9">
-  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg" sizes="192x192" type="image/jpeg">
-  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg">
+  <link rel="manifest" href="/manifest.webmanifest?v=10">
+  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg?v=10" sizes="192x192" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg?v=10">
   <style>
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:linear-gradient(160deg,#03143b,#08245d 55%,#0d63d8);color:#fff;display:grid;place-items:center;padding:22px}.card{width:min(100%,430px);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(10px)}.logo{width:146px;height:146px;object-fit:cover;border-radius:30px;display:block;margin:0 auto 18px;box-shadow:0 14px 35px rgba(0,0,0,.28)}.eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#a9ddff;font-weight:800}h1{margin:9px 0 10px;font-size:30px;line-height:1.08}.text{color:#dbeafe;line-height:1.55;margin:0 0 20px}.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px 18px;font-size:17px;font-weight:800;cursor:pointer;text-decoration:none}.install{background:#fff;color:#08245d}.chrome{margin-top:11px;background:#0ea5e9;color:#fff}.continue{margin-top:11px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}.tip{font-size:13px;color:#bfdbfe;line-height:1.5;margin:18px 0 0}.status{font-size:14px;line-height:1.45;color:#e0f2fe;margin:16px 0 0}.hidden{display:none!important}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:#03143b}
+    body{min-height:100vh;font-family:Arial,sans-serif;background:linear-gradient(160deg,#03143b,#08245d 55%,#0d63d8);color:#fff;display:grid;place-items:center;padding:22px}
+    .card{position:relative;z-index:2;width:min(100%,430px);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+    .logo{width:146px;height:146px;object-fit:cover;border-radius:30px;display:block;margin:0 auto 18px;box-shadow:0 14px 35px rgba(0,0,0,.28)}
+    .eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#a9ddff;font-weight:800}
+    h1{margin:9px 0 10px;font-size:30px;line-height:1.08}
+    .text{color:#dbeafe;line-height:1.55;margin:0 0 20px}
+    .btn{position:relative;z-index:5;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent;display:block;width:100%;border:0;border-radius:16px;padding:16px 18px;font-size:17px;font-weight:800;cursor:pointer;text-decoration:none;text-align:center}
+    .install{background:#fff;color:#08245d}
+    .chrome{margin-top:11px;background:#0ea5e9;color:#fff}
+    .continue{margin-top:11px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}
+    .tip{font-size:13px;color:#bfdbfe;line-height:1.5;margin:18px 0 0}
+    .status{font-size:14px;line-height:1.45;color:#e0f2fe;margin:16px 0 0;min-height:42px}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
   <main class="card">
-    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg" alt="Logo MY Investissements">
+    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg?v=10" alt="Logo MY Investissements">
     <div class="eyebrow">MY Investissements</div>
     <h1>Enstale aplikasyon an</h1>
     <p class="text">Enstale MY Investissements sou telefòn ou pou li louvri tankou yon aplikasyon, san ba navigatè Chrome a.</p>
+
     <button id="installAppBtn" class="btn install" type="button">📲 Installer MY Investissements</button>
-    <a id="openChromeBtn" class="btn chrome" href="intent://my-investissements.pages.dev/install.html#Intent;scheme=https;package=com.android.chrome;end">🌐 Ouvri nan Chrome</a>
-    <a class="btn continue" href="/index.html">Kontinye sou sit la</a>
-    <p id="installStatus" class="status">Si paj sa a louvri ak yon X anlè bò gòch, se yon navigatè entegre. Peze “Ouvri nan Chrome” anvan ou enstale.</p>
+
+    <a id="openChromeBtn" class="btn chrome"
+       href="intent://my-investissements.pages.dev/install.html?v=10#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fmy-investissements.pages.dev%2Finstall.html%3Fv%3D10;end">
+       🌐 Ouvri nan Chrome
+    </a>
+
+    <a id="continueBtn" class="btn continue" href="/index.html?from=install-v10">Kontinye sou sit la</a>
+
+    <p id="installStatus" class="status">Ap verifye si aplikasyon an pare pou enstale...</p>
     <p class="tip">Lè li enstale kòrèkteman, icon MY Invest la pap gen ti logo Chrome sou li epi aplikasyon an ap louvri an mòd standalone.</p>
   </main>
-  <script type="module" src="/pwa.js?v=9"></script>
+
+  <script>
+    let deferredInstallPrompt = null;
+    const installBtn = document.getElementById('installAppBtn');
+    const openChromeBtn = document.getElementById('openChromeBtn');
+    const continueBtn = document.getElementById('continueBtn');
+    const statusEl = document.getElementById('installStatus');
+
+    const setStatus = text => { statusEl.textContent = text; };
+    const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isChrome = /Chrome\//i.test(ua) && !/; wv\)/i.test(ua) && !/FBAN|FBAV|Instagram|Line\//i.test(ua);
+
+    async function registerPwa() {
+      if (!('serviceWorker' in navigator)) {
+        setStatus('Navigatè sa a pa sipòte enstalasyon PWA. Ouvri paj la nan Chrome.');
+        return false;
+      }
+      try {
+        const reg = await navigator.serviceWorker.register('/sw.js?v=10', {scope:'/', updateViaCache:'none'});
+        await reg.update();
+        await navigator.serviceWorker.ready;
+        return true;
+      } catch (e) {
+        console.error(e);
+        setStatus('Service aplikasyon an pa rive aktive. Rafrechi paj la epi eseye ankò.');
+        return false;
+      }
+    }
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      setStatus('Aplikasyon an pare. Peze bouton “Installer MY Investissements”.');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      installBtn.classList.add('hidden');
+      openChromeBtn.classList.add('hidden');
+      setStatus('MY Investissements enstale avèk siksè.');
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (isStandalone()) {
+        setStatus('MY Investissements deja enstale sou telefòn sa a.');
+        return;
+      }
+
+      await registerPwa();
+
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        setStatus(choice.outcome === 'accepted' ? 'Enstalasyon an kòmanse.' : 'Enstalasyon an anile. Ou ka eseye ankò.');
+        deferredInstallPrompt = null;
+        return;
+      }
+
+      if (!isChrome) {
+        setStatus('Ou pa nan Chrome konplè. Peze bouton ble “Ouvri nan Chrome”, epi peze Installer ankò.');
+        return;
+      }
+
+      setStatus('Chrome poko voye fenèt enstalasyon an. Peze meni ⋮ anlè a epi chwazi “Installer l’application”. Si opsyon sa pa parèt, rafrechi paj la yon fwa epi tann kèk segonn.');
+    });
+
+    openChromeBtn.addEventListener('click', () => {
+      setStatus('Ap ouvri paj la nan Chrome...');
+    });
+
+    continueBtn.addEventListener('click', () => {
+      setStatus('Ap ouvri MY Investissements...');
+    });
+
+    (async () => {
+      if (isStandalone()) {
+        installBtn.classList.add('hidden');
+        openChromeBtn.classList.add('hidden');
+        setStatus('MY Investissements deja enstale.');
+        return;
+      }
+      const ready = await registerPwa();
+      if (isChrome) {
+        openChromeBtn.classList.add('hidden');
+        if (ready && !deferredInstallPrompt) setStatus('Ou nan Chrome. Tann kèk segonn; si bouton Installer pa louvri fenèt la, itilize meni ⋮ > Installer l’application.');
+      } else if (isAndroid) {
+        setStatus('Paj la pa nan Chrome konplè. Peze “Ouvri nan Chrome”.');
+      }
+    })();
+  </script>
 </body>
 </html>
