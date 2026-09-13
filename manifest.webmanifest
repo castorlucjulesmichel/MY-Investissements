@@ -1,19 +1,28 @@
 {
+  "id": "/",
   "name": "MY Investissements",
   "short_name": "MY Invest",
   "description": "Application mobile MY Investissements pour gérer votre compte, vos dépôts, retraits, investissements et portefeuille.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait-primary",
   "background_color": "#f3f6fb",
   "theme_color": "#0b2a5b",
   "lang": "ht",
   "categories": ["finance", "business"],
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/assets/app-icon.svg",
-      "sizes": "any",
+      "src": "/assets/app-icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/app-icon-512.svg",
+      "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
