@@ -1,7 +1,8 @@
-const CACHE = 'my-investissements-v7';
+const CACHE = 'my-investissements-v8';
 const CORE = [
   '/',
   '/index.html',
+  '/install.html',
   '/investisseur.html',
   '/style.css',
   '/auth.js',
