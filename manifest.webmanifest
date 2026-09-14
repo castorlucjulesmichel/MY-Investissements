@@ -2,8 +2,8 @@
   "id": "/",
   "name": "MY Investissements",
   "short_name": "MY Invest",
-  "description": "Application mobile MY Investissements pour gérer votre compte, vos dépôts, retraits, investissements et portefeuille.",
-  "start_url": "/?source=pwa",
+  "description": "Application MY Investissements pour gérer votre compte, votre portefeuille, vos dépôts, retraits, investissements et échanges.",
+  "start_url": "/index.html?source=pwa",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
@@ -11,6 +11,7 @@
   "background_color": "#03143b",
   "theme_color": "#08245d",
   "lang": "ht",
+  "dir": "ltr",
   "categories": ["finance", "business"],
   "prefer_related_applications": false,
   "icons": [
@@ -31,6 +32,20 @@
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Espace investisseur",
+      "short_name": "Investisseur",
+      "url": "/investisseur.html#dashboard",
+      "icons": [{"src": "/assets/my-invest-logo-192-v9.jpg", "sizes": "192x192", "type": "image/jpeg"}]
+    },
+    {
+      "name": "Portefeuille",
+      "short_name": "Portefeuille",
+      "url": "/investisseur.html#wallet",
+      "icons": [{"src": "/assets/my-invest-logo-192-v9.jpg", "sizes": "192x192", "type": "image/jpeg"}]
     }
   ]
 }
