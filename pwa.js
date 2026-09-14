@@ -1,8 +1,14 @@
+const PWA_VERSION = '12';
 let deferredInstallPrompt = null;
 
 const installBtn = document.querySelector('#installAppBtn');
 const installStatus = document.querySelector('#installStatus');
 const openChromeBtn = document.querySelector('#openChromeBtn');
+
+const ua = navigator.userAgent || '';
+const isAndroid = /Android/i.test(ua);
+const isSamsung = /SamsungBrowser\//i.test(ua);
+const isChrome = /Chrome\//i.test(ua) && !/SamsungBrowser\//i.test(ua) && !/EdgA\//i.test(ua) && !/OPR\//i.test(ua) && !/Firefox\//i.test(ua) && !/; wv\)/i.test(ua);
 
 const isStandalone = () =>
   window.matchMedia('(display-mode: standalone)').matches ||
@@ -15,7 +21,7 @@ function setStatus(text) {
 async function preparePwa() {
   if (!('serviceWorker' in navigator)) return false;
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js?v=11', {
+    const registration = await navigator.serviceWorker.register(`/sw.js?v=${PWA_VERSION}`, {
       scope: '/',
       updateViaCache: 'none'
     });
@@ -24,6 +30,7 @@ async function preparePwa() {
     return true;
   } catch (error) {
     console.error('Service worker registration failed:', error);
+    setStatus('Service aplikasyon an pa rive aktive. Rafrechi paj la epi eseye ankò.');
     return false;
   }
 }
@@ -39,27 +46,22 @@ if (isStandalone()) {
 }
 
 window.addEventListener('beforeinstallprompt', event => {
-  // Sou paj ki pa gen bouton enstalasyon (tankou enskripsyon an),
-  // pa bloke pwopozisyon natif navigatè a.
-  if (!installBtn) return;
-
   event.preventDefault();
   deferredInstallPrompt = event;
-  installBtn.classList.remove('hidden');
+  installBtn?.classList.remove('hidden');
   setStatus('Aplikasyon an pare pou enstale. Peze bouton Installer la.');
 });
 
-installBtn?.addEventListener('click', async () => {
+installBtn?.addEventListener('click', async event => {
+  event.preventDefault();
+
   if (isStandalone()) {
     installBtn.classList.add('hidden');
+    setStatus('MY Investissements deja enstale.');
     return;
   }
 
-  const ready = await preparePwa();
-  if (!ready) {
-    setStatus('Service aplikasyon an pa pare. Relouvri paj la nan Chrome epi eseye ankò.');
-    return;
-  }
+  await preparePwa();
 
   if (deferredInstallPrompt) {
     deferredInstallPrompt.prompt();
@@ -74,14 +76,24 @@ installBtn?.addEventListener('click', async () => {
     return;
   }
 
-  // Si Chrome poko bay beforeinstallprompt, itilize paj enstalasyon dedye a.
-  if (!installStatus) {
-    window.location.href = '/install.html?v=11';
+  if (!location.pathname.endsWith('/install.html')) {
+    location.href = `/install.html?v=${PWA_VERSION}`;
     return;
   }
 
-  setStatus('Si fenèt enstalasyon an pa parèt, itilize meni ⋮ Chrome a epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”.');
-  openChromeBtn?.classList.remove('hidden');
+  if (isSamsung) {
+    setStatus('Ou sou Samsung Internet. Si fenèt enstalasyon an pa parèt, itilize meni navigatè a pou ajoute aplikasyon an sou ekran dakèy la, oswa peze “Ouvri nan Chrome”.');
+    openChromeBtn?.classList.remove('hidden');
+    return;
+  }
+
+  if (isAndroid && !isChrome) {
+    setStatus('Pou enstalasyon ki pi serye sou Android, peze “Ouvri nan Chrome”, epi eseye Installer ankò.');
+    openChromeBtn?.classList.remove('hidden');
+    return;
+  }
+
+  setStatus('Si Chrome poko montre fenèt enstalasyon an, peze meni ⋮ epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”.');
 });
 
 window.addEventListener('appinstalled', () => {
