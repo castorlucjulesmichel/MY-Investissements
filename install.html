@@ -9,9 +9,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MY Invest">
   <title>Enstale MY Investissements</title>
-  <link rel="manifest" href="/manifest.webmanifest?v=11">
-  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg?v=11" sizes="192x192" type="image/jpeg">
-  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg?v=11">
+  <link rel="manifest" href="/manifest.webmanifest?v=12">
+  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg?v=12" sizes="192x192" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg?v=12">
   <style>
     *{box-sizing:border-box}
     html,body{margin:0;min-height:100%;background:#03143b}
@@ -32,36 +32,36 @@
 </head>
 <body>
   <main class="card">
-    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg?v=11" alt="Logo MY Investissements">
+    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg?v=12" alt="Logo MY Investissements">
     <div class="eyebrow">MY Investissements</div>
     <h1>Enstale aplikasyon an</h1>
-    <p class="text">Enstale MY Investissements sou telefòn ou pou li louvri tankou yon aplikasyon, san ba navigatè Chrome a.</p>
+    <p class="text">Enstale MY Investissements sou telefòn ou pou li louvri tankou yon aplikasyon, san ba navigatè a.</p>
 
     <button id="installAppBtn" class="btn install" type="button">📲 Installer MY Investissements</button>
 
     <a id="openChromeBtn" class="btn chrome"
-       href="intent://my-investissements.pages.dev/install.html?v=11#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fmy-investissements.pages.dev%2Finstall.html%3Fv%3D11;end">
+       href="intent://my-investissements.pages.dev/install.html?v=12#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fmy-investissements.pages.dev%2Finstall.html%3Fv%3D12;end">
        🌐 Ouvri nan Chrome
     </a>
 
-    <a id="continueBtn" class="btn continue" href="/index.html?from=install-v11">Kontinye sou sit la</a>
+    <a id="continueBtn" class="btn continue" href="/index.html?from=install-v12">Kontinye sou sit la</a>
 
     <p id="installStatus" class="status">Ap verifye si aplikasyon an pare pou enstale...</p>
-    <p class="tip">Lè li enstale kòrèkteman, icon MY Invest la ap parèt sou telefòn ou epi aplikasyon an ap louvri san ba navigatè a.</p>
+    <p class="tip">Si w sou Samsung Internet, ou ka itilize meni navigatè a pou ajoute aplikasyon an sou ekran dakèy la, oswa ouvri paj sa a nan Chrome.</p>
   </main>
 
   <script>
     let deferredInstallPrompt = null;
     const installBtn = document.getElementById('installAppBtn');
     const openChromeBtn = document.getElementById('openChromeBtn');
-    const continueBtn = document.getElementById('continueBtn');
     const statusEl = document.getElementById('installStatus');
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isSamsung = /SamsungBrowser\//i.test(ua);
+    const isChrome = /Chrome\//i.test(ua) && !/SamsungBrowser\//i.test(ua) && !/EdgA\//i.test(ua) && !/OPR\//i.test(ua) && !/Firefox\//i.test(ua) && !/; wv\)/i.test(ua);
 
     const setStatus = text => { statusEl.textContent = text; };
     const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    const ua = navigator.userAgent || '';
-    const isAndroid = /Android/i.test(ua);
-    const isChrome = /Chrome\//i.test(ua) && !/; wv\)/i.test(ua) && !/FBAN|FBAV|Instagram|Line\//i.test(ua);
 
     async function registerPwa() {
       if (!('serviceWorker' in navigator)) {
@@ -69,7 +69,7 @@
         return false;
       }
       try {
-        const reg = await navigator.serviceWorker.register('/sw.js?v=11', {scope:'/', updateViaCache:'none'});
+        const reg = await navigator.serviceWorker.register('/sw.js?v=12', {scope:'/', updateViaCache:'none'});
         await reg.update();
         await navigator.serviceWorker.ready;
         return true;
@@ -99,7 +99,8 @@
         return;
       }
 
-      await registerPwa();
+      const ready = await registerPwa();
+      if (!ready) return;
 
       if (deferredInstallPrompt) {
         deferredInstallPrompt.prompt();
@@ -109,20 +110,19 @@
         return;
       }
 
-      if (!isChrome) {
-        setStatus('Ou pa nan Chrome konplè. Peze bouton ble “Ouvri nan Chrome”, epi peze Installer ankò.');
+      if (isSamsung) {
+        openChromeBtn.classList.remove('hidden');
+        setStatus('Ou sou Samsung Internet. Peze meni navigatè a epi chwazi opsyon pou ajoute paj la sou ekran dakèy la. Ou ka tou peze “Ouvri nan Chrome”.');
         return;
       }
 
-      setStatus('Si Chrome poko montre fenèt enstalasyon an, peze meni ⋮ anlè a epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”.');
-    });
+      if (isAndroid && !isChrome) {
+        openChromeBtn.classList.remove('hidden');
+        setStatus('Peze “Ouvri nan Chrome”, tann kèk segonn, epi peze Installer ankò.');
+        return;
+      }
 
-    openChromeBtn.addEventListener('click', () => {
-      setStatus('Ap ouvri paj la nan Chrome...');
-    });
-
-    continueBtn.addEventListener('click', () => {
-      setStatus('Ap ouvri MY Investissements...');
+      setStatus('Chrome poko montre fenèt enstalasyon an. Peze meni ⋮ anlè a epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”.');
     });
 
     (async () => {
@@ -132,12 +132,17 @@
         setStatus('MY Investissements deja enstale.');
         return;
       }
+
       const ready = await registerPwa();
       if (isChrome) {
         openChromeBtn.classList.add('hidden');
-        if (ready && !deferredInstallPrompt) setStatus('Ou nan Chrome. Si bouton Installer pa louvri fenèt la, itilize meni ⋮ > Installer l’application.');
+        if (ready && !deferredInstallPrompt) setStatus('Ou nan Chrome. Tann kèk segonn epi peze Installer. Si fenèt la pa parèt, sèvi ak meni ⋮ Chrome a.');
+      } else if (isSamsung) {
+        openChromeBtn.classList.remove('hidden');
+        setStatus('Ou sou Samsung Internet. Peze Installer; si sa pa louvri fenèt enstalasyon an, sèvi ak meni navigatè a oswa peze “Ouvri nan Chrome”.');
       } else if (isAndroid) {
-        setStatus('Paj la pa nan Chrome konplè. Peze “Ouvri nan Chrome”.');
+        openChromeBtn.classList.remove('hidden');
+        setStatus('Pou pi bon enstalasyon sou Android, ouvri paj sa a nan Chrome.');
       }
     })();
   </script>
