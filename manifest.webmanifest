@@ -3,7 +3,7 @@
   "name": "MY Investissements",
   "short_name": "MY Invest",
   "description": "Application MY Investissements pour gérer votre compte, votre portefeuille, vos dépôts, retraits, investissements et échanges.",
-  "start_url": "/index.html?source=pwa",
+  "start_url": "/index.html?source=pwa-v12",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
@@ -16,19 +16,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/assets/my-invest-logo-192-v9.jpg",
+      "src": "/assets/my-invest-logo-192-v9.jpg?v=12",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/assets/my-invest-logo-512-v9.jpg",
+      "src": "/assets/my-invest-logo-512-v9.jpg?v=12",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/assets/my-invest-logo-512-v9.jpg",
+      "src": "/assets/my-invest-logo-512-v9.jpg?v=12",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "maskable"
@@ -39,13 +39,13 @@
       "name": "Espace investisseur",
       "short_name": "Investisseur",
       "url": "/investisseur.html#dashboard",
-      "icons": [{"src": "/assets/my-invest-logo-192-v9.jpg", "sizes": "192x192", "type": "image/jpeg"}]
+      "icons": [{"src": "/assets/my-invest-logo-192-v9.jpg?v=12", "sizes": "192x192", "type": "image/jpeg"}]
     },
     {
       "name": "Portefeuille",
       "short_name": "Portefeuille",
       "url": "/investisseur.html#wallet",
-      "icons": [{"src": "/assets/my-invest-logo-192-v9.jpg", "sizes": "192x192", "type": "image/jpeg"}]
+      "icons": [{"src": "/assets/my-invest-logo-192-v9.jpg?v=12", "sizes": "192x192", "type": "image/jpeg"}]
     }
   ]
 }
