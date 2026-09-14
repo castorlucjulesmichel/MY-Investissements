@@ -1,4 +1,4 @@
-const CACHE = 'my-investissements-v10';
+const CACHE = 'my-investissements-v11';
 const CORE = [
   '/',
   '/index.html',
@@ -38,6 +38,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
+
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
