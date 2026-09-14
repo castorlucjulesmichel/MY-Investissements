@@ -9,9 +9,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MY Invest">
   <title>Enstale MY Investissements</title>
-  <link rel="manifest" href="/manifest.webmanifest?v=10">
-  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg?v=10" sizes="192x192" type="image/jpeg">
-  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg?v=10">
+  <link rel="manifest" href="/manifest.webmanifest?v=11">
+  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg?v=11" sizes="192x192" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg?v=11">
   <style>
     *{box-sizing:border-box}
     html,body{margin:0;min-height:100%;background:#03143b}
@@ -32,7 +32,7 @@
 </head>
 <body>
   <main class="card">
-    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg?v=10" alt="Logo MY Investissements">
+    <img class="logo" src="/assets/my-invest-logo-512-v9.jpg?v=11" alt="Logo MY Investissements">
     <div class="eyebrow">MY Investissements</div>
     <h1>Enstale aplikasyon an</h1>
     <p class="text">Enstale MY Investissements sou telefòn ou pou li louvri tankou yon aplikasyon, san ba navigatè Chrome a.</p>
@@ -40,14 +40,14 @@
     <button id="installAppBtn" class="btn install" type="button">📲 Installer MY Investissements</button>
 
     <a id="openChromeBtn" class="btn chrome"
-       href="intent://my-investissements.pages.dev/install.html?v=10#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fmy-investissements.pages.dev%2Finstall.html%3Fv%3D10;end">
+       href="intent://my-investissements.pages.dev/install.html?v=11#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fmy-investissements.pages.dev%2Finstall.html%3Fv%3D11;end">
        🌐 Ouvri nan Chrome
     </a>
 
-    <a id="continueBtn" class="btn continue" href="/index.html?from=install-v10">Kontinye sou sit la</a>
+    <a id="continueBtn" class="btn continue" href="/index.html?from=install-v11">Kontinye sou sit la</a>
 
     <p id="installStatus" class="status">Ap verifye si aplikasyon an pare pou enstale...</p>
-    <p class="tip">Lè li enstale kòrèkteman, icon MY Invest la pap gen ti logo Chrome sou li epi aplikasyon an ap louvri an mòd standalone.</p>
+    <p class="tip">Lè li enstale kòrèkteman, icon MY Invest la ap parèt sou telefòn ou epi aplikasyon an ap louvri san ba navigatè a.</p>
   </main>
 
   <script>
@@ -69,7 +69,7 @@
         return false;
       }
       try {
-        const reg = await navigator.serviceWorker.register('/sw.js?v=10', {scope:'/', updateViaCache:'none'});
+        const reg = await navigator.serviceWorker.register('/sw.js?v=11', {scope:'/', updateViaCache:'none'});
         await reg.update();
         await navigator.serviceWorker.ready;
         return true;
@@ -114,7 +114,7 @@
         return;
       }
 
-      setStatus('Chrome poko voye fenèt enstalasyon an. Peze meni ⋮ anlè a epi chwazi “Installer l’application”. Si opsyon sa pa parèt, rafrechi paj la yon fwa epi tann kèk segonn.');
+      setStatus('Si Chrome poko montre fenèt enstalasyon an, peze meni ⋮ anlè a epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”.');
     });
 
     openChromeBtn.addEventListener('click', () => {
@@ -135,7 +135,7 @@
       const ready = await registerPwa();
       if (isChrome) {
         openChromeBtn.classList.add('hidden');
-        if (ready && !deferredInstallPrompt) setStatus('Ou nan Chrome. Tann kèk segonn; si bouton Installer pa louvri fenèt la, itilize meni ⋮ > Installer l’application.');
+        if (ready && !deferredInstallPrompt) setStatus('Ou nan Chrome. Si bouton Installer pa louvri fenèt la, itilize meni ⋮ > Installer l’application.');
       } else if (isAndroid) {
         setStatus('Paj la pa nan Chrome konplè. Peze “Ouvri nan Chrome”.');
       }
