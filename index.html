@@ -10,15 +10,18 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MY Invest">
   <title>MY Investissements</title>
-  <link rel="manifest" href="/manifest.webmanifest?v=11">
-  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg" sizes="192x192" type="image/jpeg">
-  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg">
-  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="/manifest.webmanifest?v=12">
+  <link rel="icon" href="/assets/my-invest-logo-192-v9.jpg?v=12" sizes="192x192" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/assets/my-invest-logo-192-v9.jpg?v=12">
+  <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body class="auth-page">
   <header class="auth-topbar">
     <a class="brand" href="index.html"><span class="logo">MY</span><span><strong data-i18n="app">MY Investissements</strong><small data-i18n="secure">Accès sécurisé</small></span></a>
-    <select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="installAppBtn" class="btn ghost" type="button" style="padding:10px 12px;white-space:nowrap">📲 App</button>
+      <select id="langSelect" class="select compact"><option value="fr">FR</option><option value="ht">HT</option><option value="en">EN</option><option value="es">ES</option></select>
+    </div>
   </header>
   <main class="auth-shell">
     <section class="auth-hero">
@@ -44,6 +47,6 @@
     </section>
   </main>
   <script type="module" src="auth.js"></script>
-  <script type="module" src="pwa.js?v=11"></script>
+  <script type="module" src="pwa.js?v=12"></script>
 </body>
 </html>
