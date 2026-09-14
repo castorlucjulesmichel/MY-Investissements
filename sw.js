@@ -1,17 +1,16 @@
-const CACHE = 'my-investissements-v12';
+const CACHE = 'my-investissements-v13';
 const CORE = [
   '/',
   '/index.html',
   '/install.html',
   '/investisseur.html',
-  '/style.css',
-  '/auth.js',
-  '/i18n.js',
-  '/pwa.js',
-  '/firebase-config.js',
-  '/manifest.webmanifest',
-  '/assets/my-invest-logo-192-v9.jpg',
-  '/assets/my-invest-logo-512-v9.jpg'
+  '/style.css?v=13',
+  '/auth.js?v=13',
+  '/i18n.js?v=13',
+  '/firebase-config.js?v=13',
+  '/manifest.webmanifest?v=13',
+  '/assets/my-invest-logo-192-v9.jpg?v=13',
+  '/assets/my-invest-logo-512-v9.jpg?v=13'
 ];
 
 self.addEventListener('install', event => {
