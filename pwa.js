@@ -1,4 +1,5 @@
 let deferredInstallPrompt = null;
+
 const installBtn = document.querySelector('#installAppBtn');
 const installStatus = document.querySelector('#installStatus');
 const openChromeBtn = document.querySelector('#openChromeBtn');
@@ -7,10 +8,14 @@ const isStandalone = () =>
   window.matchMedia('(display-mode: standalone)').matches ||
   window.navigator.standalone === true;
 
+function setStatus(text) {
+  if (installStatus) installStatus.textContent = text;
+}
+
 async function preparePwa() {
   if (!('serviceWorker' in navigator)) return false;
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
+    const registration = await navigator.serviceWorker.register('/sw.js?v=11', {
       scope: '/',
       updateViaCache: 'none'
     });
@@ -21,10 +26,6 @@ async function preparePwa() {
     console.error('Service worker registration failed:', error);
     return false;
   }
-}
-
-function setStatus(text) {
-  if (installStatus) installStatus.textContent = text;
 }
 
 preparePwa();
@@ -38,17 +39,19 @@ if (isStandalone()) {
 }
 
 window.addEventListener('beforeinstallprompt', event => {
+  // Sou paj ki pa gen bouton enstalasyon (tankou enskripsyon an),
+  // pa bloke pwopozisyon natif navigatè a.
+  if (!installBtn) return;
+
   event.preventDefault();
   deferredInstallPrompt = event;
-  installBtn?.classList.remove('hidden');
+  installBtn.classList.remove('hidden');
   setStatus('Aplikasyon an pare pou enstale. Peze bouton Installer la.');
 });
 
 installBtn?.addEventListener('click', async () => {
-  if (isStandalone()) return;
-
-  if (!installStatus && !deferredInstallPrompt) {
-    window.location.href = '/install.html';
+  if (isStandalone()) {
+    installBtn.classList.add('hidden');
     return;
   }
 
@@ -65,13 +68,19 @@ installBtn?.addEventListener('click', async () => {
       installBtn.classList.add('hidden');
       setStatus('Enstalasyon an kòmanse.');
     } else {
-      setStatus('Enstalasyon an anile. Ou ka peze Installer ankò.');
+      setStatus('Enstalasyon an anile. Ou ka eseye ankò.');
     }
     deferredInstallPrompt = null;
     return;
   }
 
-  setStatus('Paj sa a louvri nan yon navigatè entegre. Peze “Ouvri nan Chrome”, apre sa peze Installer ankò.');
+  // Si Chrome poko bay beforeinstallprompt, itilize paj enstalasyon dedye a.
+  if (!installStatus) {
+    window.location.href = '/install.html?v=11';
+    return;
+  }
+
+  setStatus('Si fenèt enstalasyon an pa parèt, itilize meni ⋮ Chrome a epi chwazi “Installer l’application” oswa “Ajouter à l’écran d’accueil”.');
   openChromeBtn?.classList.remove('hidden');
 });
 
